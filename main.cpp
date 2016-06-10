@@ -46,6 +46,7 @@ static void afterMain( void );
 void DoSomethingInMainBody( void )
 {
     helloTo("World");
+    //HiddenMe(); // Hence, HiddenMe should NOT be called.
 }
 
 

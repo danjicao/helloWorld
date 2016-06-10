@@ -13,3 +13,9 @@ LIBHELLO_API void helloTo ( const char * helloToWho )
     }
 }
 
+
+LIBHELLO_LOCAL void HiddenMe( void )
+{
+    printf("I am hidden.\n");
+}
+

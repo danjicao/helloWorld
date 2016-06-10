@@ -39,6 +39,7 @@
 
 
 LIBHELLO_API void helloTo ( const char * helloToWho );
+LIBHELLO_LOCAL void HiddenMe( void );
 
 #endif // end of #ifndef hello_h_
 

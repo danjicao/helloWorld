@@ -1,6 +1,15 @@
 CMAKE_MINIMUM_REQUIRED (VERSION 3.5.2)
 
+
 PROJECT (helloWorld)
-SET (HELLOWORLD_SRCS main.cpp)
-ADD_EXECUTABLE (helloWorld ${HELLOWORLD_SRCS})
+
+
+SET (HELLOWORLD_SRCS
+    main.cpp
+)
+
+
+ADD_EXECUTABLE (helloWorld
+    ${HELLOWORLD_SRCS}
+)
 

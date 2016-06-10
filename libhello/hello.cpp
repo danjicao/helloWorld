@@ -1,7 +1,7 @@
 #include "hello.h"
 #include <cstdio>
 
-void helloTo ( const char * helloToWho )
+LIBHELLO_API void helloTo ( const char * helloToWho )
 {
     if ( helloToWho )
     {

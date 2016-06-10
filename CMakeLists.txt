@@ -15,7 +15,14 @@ SET (HELLOWORLD_SRCS
 )
 
 
+ADD_SUBDIRECTORY (libhello)
+
+
 ADD_EXECUTABLE (helloWorld
     ${HELLOWORLD_SRCS}
+)
+
+TARGET_LINK_LIBRARIES (helloWorld
+    libhello
 )
 

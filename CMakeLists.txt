@@ -16,6 +16,7 @@ SET (HELLOWORLD_SRCS
 
 
 ADD_SUBDIRECTORY (libhello)
+ADD_SUBDIRECTORY (libsysinfo)
 
 
 ADD_EXECUTABLE (helloWorld
@@ -24,5 +25,6 @@ ADD_EXECUTABLE (helloWorld
 
 TARGET_LINK_LIBRARIES (helloWorld
     libhello
+    libsysinfo
 )
 

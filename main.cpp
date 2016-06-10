@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "libhello/hello.h"
+#include "libsysinfo/libsysinfo.h"
 
 static void beforeMain( void );
 static void afterMain( void );
@@ -64,6 +65,8 @@ int CCALL main ( int argc, /*const*/ char * argv[], /*const*/ char* /*const*/ * 
     {
         printf("    %s\n", *env);
     }
+
+    printCompliedInfo();
 
     printf(">>  Appliction Begin\n");
 

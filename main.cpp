@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include "libhello/hello.h"
 
 static void beforeMain( void );
 static void afterMain( void );
@@ -44,7 +45,7 @@ static void afterMain( void );
 
 void DoSomethingInMainBody( void )
 {
-    printf("Hello World!!\n");
+    helloTo("World");
 }
 
 

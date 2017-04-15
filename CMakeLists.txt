@@ -18,9 +18,13 @@ INCLUDE (git_revision)
 INCLUDE (uninstall)
 
 
+
 PROJECT (helloWorld
     VERSION "0.1.0.0"
 )
+
+
+INCLUDE (install)
 
 
 CONFIGURE_FILE (${CMAKE_SOURCE_DIR}/cmake/config.h.in ${CMAKE_CURRENT_BINARY_DIR}/config.h)
@@ -48,4 +52,5 @@ TARGET_LINK_LIBRARIES (helloWorld
 INSTALL (TARGETS helloWorld
         RUNTIME DESTINATION bin
 )
+
 

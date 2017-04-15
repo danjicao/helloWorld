@@ -15,6 +15,7 @@ SET (CMAKE_MODULE_PATH
 
 
 INCLUDE (git_revision)
+INCLUDE (uninstall)
 
 
 PROJECT (helloWorld

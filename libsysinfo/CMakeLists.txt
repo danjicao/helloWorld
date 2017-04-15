@@ -5,6 +5,9 @@ PROJECT (libsysinfo
 )
 
 
+CONFIGURE_FILE (${CMAKE_SOURCE_DIR}/cmake/config.h.in ${CMAKE_CURRENT_BINARY_DIR}/config.h)
+
+
 SET (LIBSYSINFO_OUTPUT_NAME
     "sysinfo"
 )

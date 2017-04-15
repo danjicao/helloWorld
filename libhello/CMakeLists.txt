@@ -5,6 +5,9 @@ PROJECT (libhello
 )
 
 
+CONFIGURE_FILE (${CMAKE_SOURCE_DIR}/cmake/config.h.in ${CMAKE_CURRENT_BINARY_DIR}/config.h)
+
+
 SET (LIBHELLO_OUTPUT_NAME
     "hello"
 )

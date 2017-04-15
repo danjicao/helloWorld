@@ -22,6 +22,9 @@ PROJECT (helloWorld
 )
 
 
+CONFIGURE_FILE (${CMAKE_SOURCE_DIR}/cmake/config.h.in ${CMAKE_CURRENT_BINARY_DIR}/config.h)
+
+
 SET (HELLOWORLD_SRCS
     main.cpp
 )

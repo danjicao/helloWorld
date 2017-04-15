@@ -7,6 +7,16 @@ FOREACH (_variableName ${_variableNames})
 ENDFOREACH()
 
 
+## location of additional cmake modules
+SET (CMAKE_MODULE_PATH
+    ${CMAKE_MODULE_PATH}
+    ${CMAKE_CURRENT_SOURCE_DIR}/cmake
+)
+
+
+INCLUDE (git_revision)
+
+
 PROJECT (helloWorld)
 
 

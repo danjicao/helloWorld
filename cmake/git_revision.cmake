@@ -1,0 +1,18 @@
+FIND_PACKAGE (Git)
+
+IF (GIT_FOUND)
+    EXECUTE_PROCESS(
+        COMMAND ${GIT_EXECUTABLE} -C ${CMAKE_CURRENT_SOURCE_DIR} rev-list --max-count=1 HEAD
+        OUTPUT_VARIABLE GIT_REVISION
+        ERROR_QUIET
+    )
+    IF (NOT ${GIT_REVISION} STREQUAL "")
+        STRING (STRIP ${GIT_REVISION} GIT_REVISION)
+    ELSE ()
+        SET (GIT_REVISION "unknown")
+    ENDIF ()
+    MESSAGE (STATUS "Current git revision is ${GIT_REVISION}")
+ELSE ()
+    SET (GIT_REVISION "unknown")
+ENDIF ()
+

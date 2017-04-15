@@ -17,7 +17,9 @@ SET (CMAKE_MODULE_PATH
 INCLUDE (git_revision)
 
 
-PROJECT (helloWorld)
+PROJECT (helloWorld
+    VERSION "0.1.0.0"
+)
 
 
 SET (HELLOWORLD_SRCS

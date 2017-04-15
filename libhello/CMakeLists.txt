@@ -41,3 +41,10 @@ SET_TARGET_PROPERTIES (libhello-static
     COMPILE_DEFINITIONS LIBHELLO_STATIC=1
 )
 
+
+INSTALL (TARGETS libhello libhello-static 
+        LIBRARY DESTINATION lib
+        ARCHIVE DESTINATION lib
+        PUBLIC_HEADER DESTINATION include
+)
+

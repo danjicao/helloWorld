@@ -44,3 +44,8 @@ TARGET_LINK_LIBRARIES (helloWorld
     libsysinfo
 )
 
+
+INSTALL (TARGETS helloWorld
+        RUNTIME DESTINATION bin
+)
+

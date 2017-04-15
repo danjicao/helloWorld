@@ -41,3 +41,10 @@ SET_TARGET_PROPERTIES (libsysinfo-static
     COMPILE_DEFINITIONS LIBSYSINFO_STATIC=1
 )
 
+
+INSTALL (TARGETS libsysinfo libsysinfo-static 
+        LIBRARY DESTINATION lib
+        ARCHIVE DESTINATION lib
+        PUBLIC_HEADER DESTINATION include
+)
+

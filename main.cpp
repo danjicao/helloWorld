@@ -55,6 +55,7 @@ void DoSomethingInMainBody( void )
 int CCALL main ( int argc, /*const*/ char * argv[], /*const*/ char* /*const*/ * envp )
 {
     printf("%s ver. %s, rev. %s\n", PROJECT, PROJECT_VERSION, PROJECT_GIT_REVISION);
+    printf("libsysinfo ver. %s, rev. %s\n", libsysinfo_get_verion(), libsysinfo_get_revision());
     printf(">>  arguments:\n");
     printf("    argc=%d\n", argc);
     for( int i = 0; i < argc; ++i )

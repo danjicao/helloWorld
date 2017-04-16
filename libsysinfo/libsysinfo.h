@@ -39,6 +39,8 @@
 
 
 LIBSYSINFO_API void libsysinfo_printCompliedInfo ( void );
+LIBSYSINFO_API const char * libsysinfo_get_verion( void );
+LIBSYSINFO_API const char * libsysinfo_get_revision( void );
 
 #endif // end of #ifndef libsysinfo_h_
 

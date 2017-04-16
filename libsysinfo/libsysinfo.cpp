@@ -1,4 +1,5 @@
 #include "libsysinfo.h"
+#include "config.h"
 #include <cstdio>
 #include <cstdarg>
 
@@ -406,5 +407,15 @@ LIBSYSINFO_API void libsysinfo_printCompliedInfo ( void )
     print("    __MINGW64__ = \"%ld\" : MinGW-w64 32 Bit %d.%d\n", __MINGW64_VERSION_MAJOR, __MINGW64_VERSION_MINOR);
     #endif
 #endif
+}
+
+
+LIBSYSINFO_API const char * libsysinfo_get_verion( void ) {
+    return PROJECT_VERSION;
+}
+
+
+LIBSYSINFO_API const char * libsysinfo_get_revision( void ) {
+    return PROJECT_GIT_REVISION;
 }
 

@@ -38,7 +38,7 @@
 #endif
 
 
-LIBSYSINFO_API void printCompliedInfo ( void );
+LIBSYSINFO_API void libsysinfo_printCompliedInfo ( void );
 
 #endif // end of #ifndef libsysinfo_h_
 

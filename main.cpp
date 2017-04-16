@@ -66,7 +66,7 @@ int CCALL main ( int argc, /*const*/ char * argv[], /*const*/ char* /*const*/ * 
         printf("    %s\n", *env);
     }
 
-    printCompliedInfo();
+    libsysinfo_printCompliedInfo();
 
     printf(">>  Appliction Begin\n");
 

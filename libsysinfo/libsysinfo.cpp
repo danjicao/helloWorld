@@ -34,7 +34,7 @@ void print(const char * fmt, ...)
 }    // end of namespace {
 
 
-LIBSYSINFO_API void printCompliedInfo ( void )
+LIBSYSINFO_API void libsysinfo_printCompliedInfo ( void )
 {
     // reference :
     // 1. http://sourceforge.net/p/predef/wiki/Compilers/

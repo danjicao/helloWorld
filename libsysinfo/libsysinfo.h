@@ -51,6 +51,8 @@ typedef enum {
 LIBSYSINFO_API LIBSYSINFO_ENDIAN_TYPE libsysinfo_getByteOrderType ( void );
 LIBSYSINFO_API void libsysinfo_printByteOrderType ( void );
 
+LIBSYSINFO_API int libsysinfo_isCharSigned ( void );
+
 LIBSYSINFO_API const char * libsysinfo_get_verion( void );
 LIBSYSINFO_API const char * libsysinfo_get_revision( void );
 

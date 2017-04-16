@@ -72,6 +72,7 @@ int CCALL main ( int argc, /*const*/ char * argv[], /*const*/ char* /*const*/ * 
 
     libsysinfo_printCompliedInfo();
     libsysinfo_printByteOrderType();
+    printf("libsysinfo_isCharSigned=%d\n", libsysinfo_isCharSigned());
 
     printf(">>  Appliction Begin\n");
 

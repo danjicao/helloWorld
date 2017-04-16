@@ -20,7 +20,7 @@ INCLUDE_DIRECTORIES(
 
 
 SET (LIBHELLO_SRCS
-    hello.cpp
+    libhello.cpp
 )
 
 

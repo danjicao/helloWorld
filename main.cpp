@@ -71,6 +71,7 @@ int CCALL main ( int argc, /*const*/ char * argv[], /*const*/ char* /*const*/ * 
     }
 
     libsysinfo_printCompliedInfo();
+    libsysinfo_printByteOrderType();
 
     printf(">>  Appliction Begin\n");
 

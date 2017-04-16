@@ -2,6 +2,7 @@
 #include "config.h"
 #include <cstdio>
 #include <cstdarg>
+#include <stdint.h>
 
 #ifdef __ANDROID__
     #include <android/api-level.h>
@@ -407,6 +408,58 @@ LIBSYSINFO_API void libsysinfo_printCompliedInfo ( void )
     print("    __MINGW64__ = \"%ld\" : MinGW-w64 32 Bit %d.%d\n", __MINGW64_VERSION_MAJOR, __MINGW64_VERSION_MINOR);
     #endif
 #endif
+}
+
+
+
+LIBSYSINFO_API LIBSYSINFO_ENDIAN_TYPE libsysinfo_getByteOrderType ( void ) {
+    // https://sourceforge.net/p/predef/wiki/Endianness/
+    union {
+        uint32_t value;
+        uint8_t data[sizeof(uint32_t)];
+    } number;
+
+    number.data[0] = 0x00;
+    number.data[1] = 0x01;
+    number.data[2] = 0x02;
+    number.data[3] = 0x03;
+
+    switch (number.value)
+    {
+    case UINT32_C(0x00010203):
+        return ENDIAN_BIG;
+    case UINT32_C(0x03020100):
+        return ENDIAN_LITTLE;
+    case UINT32_C(0x02030001):
+        return ENDIAN_BIG_WORD;
+    case UINT32_C(0x01000302):
+        return ENDIAN_LITTLE_WORD;
+    default:
+        fprintf(stderr, "Error: unknown byte order: %X\n", number.value);
+        return ENDIAN_UNKNOWN;
+    }
+}
+
+LIBSYSINFO_API void libsysinfo_printByteOrderType ( void ) {
+    LIBSYSINFO_ENDIAN_TYPE type = libsysinfo_getByteOrderType();
+
+    switch(type) {
+        case ENDIAN_BIG:
+            printf("Byte order: big-endian\n"); // network byte order
+            break;
+        case ENDIAN_LITTLE:
+            printf("Byte order: little-endian\n");
+            break;
+        case ENDIAN_BIG_WORD:
+            printf("Byte order: Honeywell 316 style endian\n");
+            break;
+        case ENDIAN_LITTLE_WORD:
+            printf("Byte order: PDP-11 style endian\n");
+            break;
+        default:
+            printf("Byte order: unknown\n");
+            break;
+    }
 }
 
 

@@ -40,6 +40,8 @@
 
 LIBHELLO_API void libhello_helloTo ( const char * helloToWho );
 LIBHELLO_LOCAL void libhello_HiddenMe( void );
+LIBHELLO_API const char * libhello_get_verion( void );
+LIBHELLO_API const char * libhello_get_revision( void );
 
 #endif // end of #ifndef LIBHELLO_H_
 

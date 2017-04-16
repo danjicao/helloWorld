@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include "config.h"
 #include "libhello/libhello.h"
 #include "libsysinfo/libsysinfo.h"
 
@@ -53,6 +54,7 @@ void DoSomethingInMainBody( void )
 
 int CCALL main ( int argc, /*const*/ char * argv[], /*const*/ char* /*const*/ * envp )
 {
+    printf("%s ver. %s, rev. %s\n", PROJECT, PROJECT_VERSION, PROJECT_GIT_REVISION);
     printf(">>  arguments:\n");
     printf("    argc=%d\n", argc);
     for( int i = 0; i < argc; ++i )

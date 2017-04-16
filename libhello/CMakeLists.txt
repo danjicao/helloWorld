@@ -19,7 +19,7 @@ SET (LIBHELLO_SRCS
 
 
 SET (LIBHELLO_PUBLIC_HEADERS
-    hello.h
+    libhello.h
 )
 
 

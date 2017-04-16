@@ -1,5 +1,5 @@
-#ifndef hello_h_
-#define hello_h_
+#ifndef LIBHELLO_H_
+#define LIBHELLO_H_
 
 
 #if defined(LIBHELLO_EXPORTS) && defined(LIBHELLO_STATIC)
@@ -41,5 +41,5 @@
 LIBHELLO_API void helloTo ( const char * helloToWho );
 LIBHELLO_LOCAL void HiddenMe( void );
 
-#endif // end of #ifndef hello_h_
+#endif // end of #ifndef LIBHELLO_H_
 

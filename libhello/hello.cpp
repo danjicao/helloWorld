@@ -1,4 +1,4 @@
-#include "hello.h"
+#include "libhello.h"
 #include <cstdio>
 
 LIBHELLO_API void helloTo ( const char * helloToWho )

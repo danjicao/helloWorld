@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "libhello/hello.h"
+#include "libhello/libhello.h"
 #include "libsysinfo/libsysinfo.h"
 
 static void beforeMain( void );

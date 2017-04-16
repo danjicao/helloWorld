@@ -46,8 +46,8 @@ static void afterMain( void );
 
 void DoSomethingInMainBody( void )
 {
-    helloTo("World");
-    //HiddenMe(); // Hence, HiddenMe should NOT be called.
+    libhello_helloTo("World");
+    //libhello_HiddenMe(); // Hence, HiddenMe should NOT be called.
 }
 
 

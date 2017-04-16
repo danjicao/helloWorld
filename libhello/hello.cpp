@@ -1,7 +1,7 @@
 #include "libhello.h"
 #include <cstdio>
 
-LIBHELLO_API void helloTo ( const char * helloToWho )
+LIBHELLO_API void libhello_helloTo ( const char * helloToWho )
 {
     if ( helloToWho )
     {
@@ -14,7 +14,7 @@ LIBHELLO_API void helloTo ( const char * helloToWho )
 }
 
 
-LIBHELLO_LOCAL void HiddenMe( void )
+LIBHELLO_LOCAL void libhello_HiddenMe( void )
 {
     printf("I am hidden.\n");
 }

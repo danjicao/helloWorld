@@ -38,8 +38,8 @@
 #endif
 
 
-LIBHELLO_API void helloTo ( const char * helloToWho );
-LIBHELLO_LOCAL void HiddenMe( void );
+LIBHELLO_API void libhello_helloTo ( const char * helloToWho );
+LIBHELLO_LOCAL void libhello_HiddenMe( void );
 
 #endif // end of #ifndef LIBHELLO_H_
 

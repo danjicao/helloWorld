@@ -354,14 +354,36 @@ LIBSYSINFO_API void libsysinfo_printCompliedInfo ( void )
 
 
 #if defined _MSC_VER // Microsoft Visual C++
-    #if _MSC_VER >= 1900
-    print("    _MSC_VER = \"%ld\" : Microsoft Visual C++ 14.0 (2015)\n", _MSC_VER);
+    #ifdef _MSC_FULL_VER
+    print("    _MSC_FULL_VER = \"%ld\"\n", _MSC_FULL_VER);
+    #endif
+
+    #if _MSC_VER >= 1910
+    print("    _MSC_VER = \"%ld\" : Microsoft Visual C++ 15.0 (2017)\n", _MSC_VER); // _MSC_FULL_VER == 191025017
+    #elif _MSC_VER >= 1900
+        #if _MSC_FULL_VER >= 190024210L
+        print("    _MSC_VER = \"%ld\" : Microsoft Visual C++ 14.0 (2015 Update 3)\n", _MSC_VER);
+        #elif _MSC_FULL_VER >= 190023918L
+        print("    _MSC_VER = \"%ld\" : Microsoft Visual C++ 14.0 (2015 Update 2)\n", _MSC_VER);
+        #elif _MSC_FULL_VER >= 190023506L
+        print("    _MSC_VER = \"%ld\" : Microsoft Visual C++ 14.0 (2015 Update 1)\n", _MSC_VER);
+        #elif _MSC_FULL_VER >= 190023026L
+        print("    _MSC_VER = \"%ld\" : Microsoft Visual C++ 14.0 (2015)\n", _MSC_VER);
+        #else
+        print("    _MSC_VER = \"%ld\" : Microsoft Visual C++ 14.0 (2015) Unknown\n", _MSC_VER);
+        #endif
     #elif _MSC_VER >= 1800
-    print("    _MSC_VER = \"%ld\" : Microsoft Visual C++ 12.0 (2013)\n", _MSC_VER);
+    print("    _MSC_VER = \"%ld\" : Microsoft Visual C++ 12.0 (2013)\n", _MSC_VER); // _MSC_FULL_VER == 180021005
     #elif _MSC_VER >= 1700
-    print("    _MSC_VER = \"%ld\" : Microsoft Visual C++ 11.0 (2012)\n", _MSC_VER);
+    print("    _MSC_VER = \"%ld\" : Microsoft Visual C++ 11.0 (2012)\n", _MSC_VER); // _MSC_FULL_VER == 170050727
     #elif _MSC_VER >= 1600
-    print("    _MSC_VER = \"%ld\" : Microsoft Visual C++ 10.0 (2010)\n", _MSC_VER);
+        #if _MSC_FULL_VER >= 160040219L
+        print("    _MSC_VER = \"%ld\" : Microsoft Visual C++ 10.0 (2010) SP1\n", _MSC_VER);
+        #elif _MSC_FULL_VER >= 160030319L
+        print("    _MSC_VER = \"%ld\" : Microsoft Visual C++ 10.0 (2010)\n", _MSC_VER);
+        #else
+        print("    _MSC_VER = \"%ld\" : Microsoft Visual C++ 10.0 (2010) Unknown\n", _MSC_VER);
+        #endif
     #elif _MSC_VER >= 1500
         #if _MSC_FULL_VER >= 150030729L
         print("    _MSC_VER = \"%ld\" : Microsoft Visual C++ 9.0 SP1\n", _MSC_VER);

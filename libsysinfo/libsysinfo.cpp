@@ -90,7 +90,9 @@ LIBSYSINFO_API void libsysinfo_printCompliedInfo ( void )
 #ifdef __embedded_cplusplus
     print("    __embedded_cplusplus : Embedded C++\n");
 #elif defined(__cplusplus)
-    #if __cplusplus >= 201103L
+    #if __cplusplus >= 201402L
+    print("    __cplusplus = \"%d\" : C++14 (ISO/IEC 14882:2011)\n", __cplusplus);
+    #elif __cplusplus >= 201103L
     print("    __cplusplus = \"%d\" : C++11 (ISO/IEC 14882:2011)\n", __cplusplus);
     #elif __cplusplus >= 199711L
     print("    __cplusplus = \"%d\" : C++98 (ISO/IEC 14882:1998)\n", __cplusplus);

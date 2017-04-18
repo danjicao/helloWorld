@@ -410,6 +410,10 @@ LIBSYSINFO_API void libsysinfo_printCompliedInfo ( void )
     print("    __MINGW64__ = \"%ld\" : MinGW-w64 32 Bit %d.%d\n", __MINGW64_VERSION_MAJOR, __MINGW64_VERSION_MINOR);
     #endif
 #endif
+
+#ifdef __CC_ARM
+    print("    ARM Compiler : __CC_ARM, __ARMCC_VERSION=\"%ld\"\n", __ARMCC_VERSION); // VRPBBB: V = Version / R = Revision / P = Patch / BBB = Build
+#endif
 }
 
 

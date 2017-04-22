@@ -1,6 +1,10 @@
 CMAKE_MINIMUM_REQUIRED (VERSION 3.5.2)
 
 
+OPTION (enable_shared_libsysinfo "enable shared libsysinfo" ON)
+OPTION (enable_shared_libhello "enable shared libhello" ON)
+
+
 GET_CMAKE_PROPERTY (_variableNames VARIABLES)
 FOREACH (_variableName ${_variableNames})
     MESSAGE (STATUS "${_variableName}=${${_variableName}}")
@@ -49,10 +53,27 @@ ADD_EXECUTABLE (helloWorld
     ${HELLOWORLD_SRCS}
 )
 
-TARGET_LINK_LIBRARIES (helloWorld
-    libhello
-    libsysinfo
-)
+
+IF (enable_shared_libhello)
+    TARGET_LINK_LIBRARIES (helloWorld
+        libhello
+    )
+ELSE ()
+    TARGET_LINK_LIBRARIES (helloWorld
+        libhello-static
+    )
+ENDIF ()
+
+
+IF (enable_shared_libsysinfo)
+    TARGET_LINK_LIBRARIES (helloWorld
+        libsysinfo
+    )
+ELSE ()
+    TARGET_LINK_LIBRARIES (helloWorld
+        libsysinfo-static
+    )
+ENDIF ()
 
 
 INSTALL (TARGETS helloWorld

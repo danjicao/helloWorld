@@ -3,6 +3,8 @@ CMAKE_MINIMUM_REQUIRED (VERSION 3.5.2)
 
 OPTION (enable_shared_libsysinfo "enable shared libsysinfo" ON)
 OPTION (enable_shared_libhello "enable shared libhello" ON)
+OPTION (enable_plugins "enable plugins" ON)
+OPTION (enable_shared_libplugins "enable shared libplugins" ON)
 
 
 IF (CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
@@ -84,6 +86,20 @@ ELSE ()
     TARGET_LINK_LIBRARIES (helloWorld
         libsysinfo-static
     )
+ENDIF ()
+
+
+IF (enable_plugins)
+    ADD_DEFINITIONS(
+        -DENABLE_PLUGINS
+    )
+    ADD_SUBDIRECTORY (libplugins)
+
+    IF (enable_shared_libplugins)
+        TARGET_LINK_LIBRARIES (helloWorld libplugins)
+    ELSE ()
+        TARGET_LINK_LIBRARIES (helloWorld libplugins-static)
+    ENDIF ()
 ENDIF ()
 
 

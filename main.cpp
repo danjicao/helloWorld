@@ -3,6 +3,11 @@
 #include "libhello/libhello.h"
 #include "libsysinfo/libsysinfo.h"
 
+#ifdef ENABLE_PLUGINS
+#include "libplugins/libplugins.h"
+#endif
+
+
 static void beforeMain( void );
 static void afterMain( void );
 
@@ -52,11 +57,24 @@ void DoSomethingInMainBody( void )
 }
 
 
+#ifdef ENABLE_PLUGINS
+int PluginEventHandler( const char * ) {
+
+    return 0;
+}
+#endif
+
+
 int CCALL main ( int argc, /*const*/ char * argv[], /*const*/ char* /*const*/ * envp )
 {
     printf("%s ver. %s, rev. %s (%s)\n", PROJECT, PROJECT_VERSION, PROJECT_GIT_REVISION, PROJECT_BUILD_TIME);
     printf("libsysinfo ver. %s, rev. %s\n", libsysinfo_get_verion(), libsysinfo_get_revision());
     printf("libhello   ver. %s, rev. %s\n", libhello_get_verion(), libhello_get_revision());
+
+    #ifdef ENABLE_PLUGINS
+    printf("%10s ver. %s, rev. %s, sover. %s (%s)\n", libplugins_get_plugin_name(), libplugins_get_plugin_version(), libplugins_get_plugin_revision(), libplugins_get_plugin_soversion(), libplugins_get_plugin_buildtime());
+    #endif
+
     printf(">>  arguments:\n");
     printf("    argc=%d\n", argc);
     for( int i = 0; i < argc; ++i )
@@ -70,6 +88,11 @@ int CCALL main ( int argc, /*const*/ char * argv[], /*const*/ char* /*const*/ * 
         printf("    %s\n", *env);
     }
 
+    #ifdef ENABLE_PLUGINS
+    libplugins_init("", PluginEventHandler);
+    libplugins_deinit();
+    #endif
+    
     libsysinfo_printCompliedInfo();
     libsysinfo_printByteOrderType();
     printf("libsysinfo_isCharSigned=%d\n", libsysinfo_isCharSigned());

@@ -5,6 +5,15 @@ OPTION (enable_shared_libsysinfo "enable shared libsysinfo" ON)
 OPTION (enable_shared_libhello "enable shared libhello" ON)
 
 
+IF (CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
+    SET (CMAKE_C_FLAGS   "-Werror" CACHE STRING "" FORCE)
+    SET (CMAKE_CXX_FLAGS "-Werror" CACHE STRING "" FORCE) # -Werror: Make all warnings into errors.
+    SET (CMAKE_CXX_FLAGS "-Wall" CACHE STRING "" FORCE)
+    SET (CMAKE_CXX_FLAGS "-pedantic" CACHE STRING "" FORCE)
+    SET (CMAKE_CXX_FLAGS "-Wextra" CACHE STRING "" FORCE)
+ENDIF ()
+
+
 GET_CMAKE_PROPERTY (_variableNames VARIABLES)
 FOREACH (_variableName ${_variableNames})
     MESSAGE (STATUS "${_variableName}=${${_variableName}}")

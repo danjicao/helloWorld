@@ -93,7 +93,9 @@ IF (enable_plugins)
     ADD_DEFINITIONS(
         -DENABLE_PLUGINS
     )
+
     ADD_SUBDIRECTORY (libplugins)
+    ADD_SUBDIRECTORY (plugins/libexample)
 
     IF (enable_shared_libplugins)
         TARGET_LINK_LIBRARIES (helloWorld libplugins)

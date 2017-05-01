@@ -22,6 +22,8 @@ INCLUDE (git_revision)
 INCLUDE (uninstall)
 
 
+STRING (TIMESTAMP PROJECT_BUILD_TIME "%Y-%m-%dT%H:%M:%SZ" UTC)
+
 
 PROJECT (helloWorld
     VERSION "0.1.0.0"

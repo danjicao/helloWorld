@@ -16,6 +16,12 @@ IF (CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
 ENDIF ()
 
 
+IF (NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+  MESSAGE (STATUS "No build type selected, default to Debug")
+  SET (CMAKE_BUILD_TYPE "Debug" CACHE STRING "Build type (default Debug)" FORCE)
+ENDIF()
+
+
 GET_CMAKE_PROPERTY (_variableNames VARIABLES)
 FOREACH (_variableName ${_variableNames})
     MESSAGE (STATUS "${_variableName}=${${_variableName}}")

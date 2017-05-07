@@ -22,7 +22,7 @@
             #define LIBHELLO_LOCAL
         #endif
     #else
-        #error "Unknown Complier. Please specify including file in the hello.h."
+        #error "Unknown Complier. Please specify including file in the libhello.h."
     #endif
 #else
     #pragma message("Importing library libhello.")
@@ -33,7 +33,7 @@
         #define LIBHELLO_API
         #define LIBHELLO_LOCAL
     #else
-        #error "Unknown Complier. Please specify including file in the hello.h."
+        #error "Unknown Complier. Please specify including file in the libhello.h."
     #endif
 #endif
 

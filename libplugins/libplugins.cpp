@@ -8,7 +8,7 @@
 namespace {
     CPluginsManager * g_PluginsManager = NULL;
     int init( const char * parameters, PLUGIN_EVENT_HANDLER eventHandler) {
-        boost::filesystem::path defaultModulesDirectory = boost::dll::symbol_location_ptr(libplugins_get_plugin_version).parent_path();
+        boost::filesystem::path defaultModulesDirectory = boost::dll::symbol_location(libplugins_get_plugin_version).parent_path();
         defaultModulesDirectory.append("/");
         defaultModulesDirectory.append(PLUGIN_MODULES_DIRNAME);
 

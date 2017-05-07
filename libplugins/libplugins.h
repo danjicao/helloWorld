@@ -22,7 +22,7 @@
             #define LIBPLUGINS_LOCAL
         #endif
     #else
-        #error "Unknown Complier. Please specify incluing file in the libplugins.h."
+        #error "Unknown Complier. Please specify including file in the libplugins.h."
     #endif
 #else
     #pragma message("Importing library libplugins.")
@@ -33,7 +33,7 @@
         #define LIBPLUGINS_API
         #define LIBPLUGINS_LOCAL
     #else
-        #error "Unknown Complier. Please specify incluing file in the libplugins.h."
+        #error "Unknown Complier. Please specify including file in the libplugins.h."
     #endif
 #endif
 

@@ -22,7 +22,7 @@
             #define LIBEXAMPLE_LOCAL
         #endif
     #else
-        #error "Unknown Complier. Please specify incluing file in the libexample.h."
+        #error "Unknown Complier. Please specify including file in the libexample.h."
     #endif
 #else
     #pragma message("Importing library libexample.")
@@ -33,7 +33,7 @@
         #define LIBEXAMPLE_API
         #define LIBEXAMPLE_LOCAL
     #else
-        #error "Unknown Complier. Please specify incluing file in the libexample.h."
+        #error "Unknown Complier. Please specify including file in the libexample.h."
     #endif
 #endif
 

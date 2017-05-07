@@ -22,7 +22,7 @@
             #define LIBSYSINFO_LOCAL
         #endif
     #else
-        #error "Unknown Complier. Please specify incluing file in the libsysinfo.h."
+        #error "Unknown Complier. Please specify including file in the libsysinfo.h."
     #endif
 #else
     #pragma message("Importing library libsysinfo.")
@@ -33,7 +33,7 @@
         #define LIBSYSINFO_API
         #define LIBSYSINFO_LOCAL
     #else
-        #error "Unknown Complier. Please specify incluing file in the libsysinfo.h."
+        #error "Unknown Complier. Please specify including file in the libsysinfo.h."
     #endif
 #endif
 

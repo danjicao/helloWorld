@@ -36,6 +36,9 @@ void print(const char * fmt, ...)
 }    // end of namespace {
 
 
+PLUGIN_INFO_APIS_DEFINITION(LIBSYSINFO_API, libsysinfo, PROJECT_VERSION, PROJECT_GIT_REVISION, PROJECT_VERSION_MAJOR, PROJECT_BUILD_TIME)
+
+
 LIBSYSINFO_API void libsysinfo_printCompliedInfo ( void )
 {
     // reference :
@@ -494,15 +497,5 @@ LIBSYSINFO_API void libsysinfo_printByteOrderType ( void ) {
 LIBSYSINFO_API int libsysinfo_isCharSigned ( void ) {
     char negativeOne = (char) -1;
     return (negativeOne < 0)?1:0;
-}
-
-
-LIBSYSINFO_API const char * libsysinfo_get_verion( void ) {
-    return PROJECT_VERSION;
-}
-
-
-LIBSYSINFO_API const char * libsysinfo_get_revision( void ) {
-    return PROJECT_GIT_REVISION;
 }
 

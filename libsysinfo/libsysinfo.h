@@ -37,6 +37,16 @@
     #endif
 #endif
 
+#include "libplugins_api.h"
+
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+
+PLUGIN_INFO_APIS_DECLARATION(LIBSYSINFO_API, libsysinfo)
+
 
 LIBSYSINFO_API void libsysinfo_printCompliedInfo ( void );
 
@@ -53,8 +63,9 @@ LIBSYSINFO_API void libsysinfo_printByteOrderType ( void );
 
 LIBSYSINFO_API int libsysinfo_isCharSigned ( void );
 
-LIBSYSINFO_API const char * libsysinfo_get_verion( void );
-LIBSYSINFO_API const char * libsysinfo_get_revision( void );
 
+#ifdef __cplusplus
+}   // end of extern "C" {
+#endif
 #endif // end of #ifndef libsysinfo_h_
 

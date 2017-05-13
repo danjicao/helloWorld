@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <iostream>
 #include "config.h"
 #include "libhello/libhello.h"
 #include "libsysinfo/libsysinfo.h"
@@ -6,6 +7,10 @@
 #ifdef ENABLE_PLUGINS
 #include "libplugins/libplugins.h"
 #endif
+
+
+#include <boost/program_options.hpp>
+namespace po = boost::program_options;
 
 
 static void beforeMain( void );
@@ -67,41 +72,89 @@ int PluginEventHandler( const char * ) {
 
 int CCALL main ( int argc, /*const*/ char * argv[], /*const*/ char* /*const*/ * envp )
 {
-    printf("%s ver. %s, rev. %s (%s)\n", PROJECT, PROJECT_VERSION, PROJECT_GIT_REVISION, PROJECT_BUILD_TIME);
-    printf("libsysinfo ver. %s, rev. %s\n", libsysinfo_get_verion(), libsysinfo_get_revision());
-    printf("libhello   ver. %s, rev. %s\n", libhello_get_verion(), libhello_get_revision());
-
+    po::options_description desc("Allowed options");
+    desc.add_options()
+        ("help,h", "produce help message")
+        ("version,v", "show version")
+        ("arguments", "show arguments")
+        ("env", "show environment variables")
     #ifdef ENABLE_PLUGINS
-    printf("%10s ver. %s, rev. %s, sover. %s (%s)\n", libplugins_get_plugin_name(), libplugins_get_plugin_version(), libplugins_get_plugin_revision(), libplugins_get_plugin_soversion(), libplugins_get_plugin_buildtime());
+        ("plugins,p", "enable plugins system")
     #endif
+        ("printCompliedInfo", "print complied information")
+    ;
 
-    printf(">>  arguments:\n");
-    printf("    argc=%d\n", argc);
-    for( int i = 0; i < argc; ++i )
-    {
-        printf( "    argv[%2d] = \"%s\"\n", i, argv[i] );
+    po::variables_map vm;
+    try {
+        po::store(po::parse_command_line(argc, argv, desc), vm);
+        po::notify(vm);    
+
+        if ( vm.count("help") ) {
+            std::cout << desc << std::endl;
+            return 1;
+        }
+        
+        if ( vm.count("version") ) {
+            printf("%s ver. %s, rev. %s (%s)\n", PROJECT, PROJECT_VERSION, PROJECT_GIT_REVISION, PROJECT_BUILD_TIME);
+            printf("libsysinfo ver. %s, rev. %s\n", libsysinfo_get_verion(), libsysinfo_get_revision());
+            printf("libhello   ver. %s, rev. %s\n", libhello_get_verion(), libhello_get_revision());
+
+            #ifdef ENABLE_PLUGINS
+            printf("%10s ver. %s, rev. %s, sover. %s (%s)\n", libplugins_get_plugin_name(), libplugins_get_plugin_version(), libplugins_get_plugin_revision(), libplugins_get_plugin_soversion(), libplugins_get_plugin_buildtime());
+            #endif
+        }
+
+        if ( vm.count("arguments") ) {
+            printf(">>  arguments:\n");
+            printf("    argc=%d\n", argc);
+            for( int i = 0; i < argc; ++i )
+            {
+                printf( "    argv[%2d] = \"%s\"\n", i, argv[i] );
+            }
+        }
+
+        if ( vm.count("env") ) {
+            printf(">>  environment variables:\n");
+            for (const char* const* env = envp; *env != NULL; ++env)
+            {
+                printf("    %s\n", *env);
+            }
+        }
+
+        #ifdef ENABLE_PLUGINS
+        if ( vm.count("plugins") ) {
+            libplugins_init("", PluginEventHandler);
+            libplugins_deinit();
+        }
+        #endif
+        
+        if ( vm.count("printCompliedInfo") ) {
+            libsysinfo_printCompliedInfo();
+            libsysinfo_printByteOrderType();
+            printf("libsysinfo_isCharSigned=%d\n", libsysinfo_isCharSigned());
+        }
+
+        printf(">>  Appliction Begin\n");
+
+        DoSomethingInMainBody();
+
+        printf(">>  Appliction Finish\n");
+
+    } catch ( const po::unknown_option& e ) {
+        std::cerr << "Error! (boost::program_options) " << e.what() << std::endl;
+        std::cerr << desc << std::endl;
+        return 1;
+    } catch ( const po::error& e ) {
+        std::cerr << "Error! (boost::program_options) " << e.what() << std::endl;
+        return 1;
+    } catch ( const std::exception& e ) {
+        std::cerr << "Error! " << e.what() << std::endl;
+        return 1;
+    } catch ( ... ) {
+        std::cerr << "Error! Unknown." << std::endl;
+        return 1;
     }
 
-    printf(">>  environment variables:\n");
-    for (const char* const* env = envp; *env != NULL; ++env)
-    {
-        printf("    %s\n", *env);
-    }
-
-    #ifdef ENABLE_PLUGINS
-    libplugins_init("", PluginEventHandler);
-    libplugins_deinit();
-    #endif
-    
-    libsysinfo_printCompliedInfo();
-    libsysinfo_printByteOrderType();
-    printf("libsysinfo_isCharSigned=%d\n", libsysinfo_isCharSigned());
-
-    printf(">>  Appliction Begin\n");
-
-    DoSomethingInMainBody();
-
-    printf(">>  Appliction Finish\n");
     return 0;
 }
 

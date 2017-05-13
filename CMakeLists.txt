@@ -68,28 +68,28 @@ INCLUDE_DIRECTORIES(
 ) 
 
 
-ADD_EXECUTABLE (helloWorld
+ADD_EXECUTABLE (${PROJECT_NAME}
     ${HELLOWORLD_SRCS}
 )
 
 
 IF (enable_shared_libhello)
-    TARGET_LINK_LIBRARIES (helloWorld
+    TARGET_LINK_LIBRARIES (${PROJECT_NAME}
         libhello
     )
 ELSE ()
-    TARGET_LINK_LIBRARIES (helloWorld
+    TARGET_LINK_LIBRARIES (${PROJECT_NAME}
         libhello-static
     )
 ENDIF ()
 
 
 IF (enable_shared_libsysinfo)
-    TARGET_LINK_LIBRARIES (helloWorld
+    TARGET_LINK_LIBRARIES (${PROJECT_NAME}
         libsysinfo
     )
 ELSE ()
-    TARGET_LINK_LIBRARIES (helloWorld
+    TARGET_LINK_LIBRARIES (${PROJECT_NAME}
         libsysinfo-static
     )
 ENDIF ()
@@ -104,14 +104,14 @@ IF (enable_plugins)
     ADD_SUBDIRECTORY (plugins/libexample)
 
     IF (enable_shared_libplugins)
-        TARGET_LINK_LIBRARIES (helloWorld libplugins)
+        TARGET_LINK_LIBRARIES (${PROJECT_NAME} libplugins)
     ELSE ()
-        TARGET_LINK_LIBRARIES (helloWorld libplugins-static)
+        TARGET_LINK_LIBRARIES (${PROJECT_NAME} libplugins-static)
     ENDIF ()
 ENDIF ()
 
 
-INSTALL (TARGETS helloWorld
+INSTALL (TARGETS ${PROJECT_NAME}
         RUNTIME DESTINATION bin
 )
 

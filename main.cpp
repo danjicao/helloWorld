@@ -97,7 +97,7 @@ int CCALL main ( int argc, /*const*/ char * argv[], /*const*/ char* /*const*/ * 
         if ( vm.count("version") ) {
             printf("%s ver. %s, rev. %s (%s)\n", PROJECT, PROJECT_VERSION, PROJECT_GIT_REVISION, PROJECT_BUILD_TIME);
             printf("libsysinfo ver. %s, rev. %s\n", libsysinfo_get_verion(), libsysinfo_get_revision());
-            printf("libhello   ver. %s, rev. %s\n", libhello_get_verion(), libhello_get_revision());
+            printf("%-10s ver. %s, rev. %s, sover. %s (%s)\n", libhello_get_plugin_name(), libhello_get_plugin_version(), libhello_get_plugin_revision(), libhello_get_plugin_soversion(), libhello_get_plugin_buildtime());
 
             #ifdef ENABLE_PLUGINS
             printf("%10s ver. %s, rev. %s, sover. %s (%s)\n", libplugins_get_plugin_name(), libplugins_get_plugin_version(), libplugins_get_plugin_revision(), libplugins_get_plugin_soversion(), libplugins_get_plugin_buildtime());

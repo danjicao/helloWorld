@@ -38,10 +38,23 @@
 #endif
 
 
+#include "libplugins_api.h"
+
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+
+PLUGIN_INFO_APIS_DECLARATION(LIBHELLO_API, libhello)
+
+
 LIBHELLO_API void libhello_helloTo ( const char * helloToWho );
 LIBHELLO_LOCAL void libhello_HiddenMe( void );
-LIBHELLO_API const char * libhello_get_verion( void );
-LIBHELLO_API const char * libhello_get_revision( void );
 
+
+#ifdef __cplusplus
+}   // end of extern "C" {
+#endif
 #endif // end of #ifndef LIBHELLO_H_
 

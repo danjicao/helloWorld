@@ -2,6 +2,10 @@
 #include "config.h"
 #include <cstdio>
 
+
+PLUGIN_INFO_APIS_DEFINITION(LIBHELLO_API, libhello, PROJECT_VERSION, PROJECT_GIT_REVISION, PROJECT_VERSION_MAJOR, PROJECT_BUILD_TIME)
+
+
 LIBHELLO_API void libhello_helloTo ( const char * helloToWho )
 {
     if ( helloToWho )
@@ -18,15 +22,5 @@ LIBHELLO_API void libhello_helloTo ( const char * helloToWho )
 LIBHELLO_LOCAL void libhello_HiddenMe( void )
 {
     printf("I am hidden.\n");
-}
-
-
-LIBHELLO_API const char * libhello_get_verion( void ) {
-    return PROJECT_VERSION;
-}
-
-
-LIBHELLO_API const char * libhello_get_revision( void ) {
-    return PROJECT_GIT_REVISION;
 }
 

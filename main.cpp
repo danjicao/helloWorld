@@ -76,6 +76,7 @@ int CCALL main ( int argc, /*const*/ char * argv[], /*const*/ char* /*const*/ * 
     desc.add_options()
         ("help,h", "produce help message")
         ("version,v", "show version")
+        ("all,a", "run all sections")
         ("arguments", "show arguments")
         ("env", "show environment variables")
     #ifdef ENABLE_PLUGINS
@@ -93,8 +94,10 @@ int CCALL main ( int argc, /*const*/ char * argv[], /*const*/ char* /*const*/ * 
             std::cout << desc << std::endl;
             return 1;
         }
+
+        bool runAllSections( vm.count("all") > 0 );
         
-        if ( vm.count("version") ) {
+        if ( runAllSections || vm.count("version") ) {
             printf("%s ver. %s, rev. %s (%s)\n", PROJECT, PROJECT_VERSION, PROJECT_GIT_REVISION, PROJECT_BUILD_TIME);
             printf("%-10s ver. %s, rev. %s, sover. %s (%s)\n", libsysinfo_get_plugin_name(), libsysinfo_get_plugin_version(), libsysinfo_get_plugin_revision(), libsysinfo_get_plugin_soversion(), libsysinfo_get_plugin_buildtime());
             printf("%-10s ver. %s, rev. %s, sover. %s (%s)\n", libhello_get_plugin_name(), libhello_get_plugin_version(), libhello_get_plugin_revision(), libhello_get_plugin_soversion(), libhello_get_plugin_buildtime());
@@ -104,7 +107,7 @@ int CCALL main ( int argc, /*const*/ char * argv[], /*const*/ char* /*const*/ * 
             #endif
         }
 
-        if ( vm.count("arguments") ) {
+        if ( runAllSections || vm.count("arguments") ) {
             printf(">>  arguments:\n");
             printf("    argc=%d\n", argc);
             for( int i = 0; i < argc; ++i )
@@ -113,7 +116,7 @@ int CCALL main ( int argc, /*const*/ char * argv[], /*const*/ char* /*const*/ * 
             }
         }
 
-        if ( vm.count("env") ) {
+        if ( runAllSections || vm.count("env") ) {
             printf(">>  environment variables:\n");
             for (const char* const* env = envp; *env != NULL; ++env)
             {
@@ -122,13 +125,13 @@ int CCALL main ( int argc, /*const*/ char * argv[], /*const*/ char* /*const*/ * 
         }
 
         #ifdef ENABLE_PLUGINS
-        if ( vm.count("plugins") ) {
+        if ( runAllSections || vm.count("plugins") ) {
             libplugins_init("", PluginEventHandler);
             libplugins_deinit();
         }
         #endif
         
-        if ( vm.count("printCompliedInfo") ) {
+        if ( runAllSections || vm.count("printCompliedInfo") ) {
             libsysinfo_printCompliedInfo();
             libsysinfo_printByteOrderType();
             printf("libsysinfo_isCharSigned=%d\n", libsysinfo_isCharSigned());

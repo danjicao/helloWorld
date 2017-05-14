@@ -7,6 +7,7 @@ SET (PLUGIN_NAME_WITHOUT_LIB
 
 SET (PLUGIN_PUBLIC_HEADERS
     libpluginhelper.h
+    libpluginhelper_assert.h
 )
 
 
@@ -17,6 +18,7 @@ LIST (APPEND PLUGIN_PUBLIC_HEADERS ${CMAKE_SOURCE_DIR}/plugins/common/libplugins
 
 SET (PLUGIN_SRCS
     libpluginhelper.cpp
+    libpluginhelper_assert.cpp
 )
 
 

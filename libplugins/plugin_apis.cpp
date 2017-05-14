@@ -13,6 +13,11 @@ PluginApis::PluginApis( const std::string & path )
     boost::system::error_code  errorCodeOfLoadSharedLibrary;
     try {
         pluginName = libPath.stem().string();
+        size_t dotPos = pluginName.find_first_of(".");
+
+        if ( std::string::npos != dotPos ) {
+            pluginName = pluginName.substr(0, dotPos);
+        }
         
         pluginLib.reset(new boost::dll::shared_library(libPath, boost::dll::load_mode::rtld_lazy, errorCodeOfLoadSharedLibrary));
         if ( errorCodeOfLoadSharedLibrary.value() ) {

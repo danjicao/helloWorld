@@ -9,6 +9,7 @@ SET (PLUGIN_PUBLIC_HEADERS
     libpluginhelper.h
     libpluginhelper_assert.h
     libpluginhelper_string.h
+    libpluginhelper_time.h
 )
 
 
@@ -21,6 +22,7 @@ SET (PLUGIN_SRCS
     libpluginhelper.cpp
     libpluginhelper_assert.cpp
     libpluginhelper_string.cpp
+    libpluginhelper_time.cpp
 )
 
 

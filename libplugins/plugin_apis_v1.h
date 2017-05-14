@@ -26,6 +26,8 @@ public:
     int  request_without_response( const char * );
     int  free_response( char ** );
 
+    bool isEqual(const PluginApisV1 * rhs ) const;
+
 };  // end of class PluginApisV1
 
 

@@ -35,6 +35,7 @@ private:
 
     static bool loadPluginsFrom( const boost::filesystem::path & _modulesDirectory, PLUGIN_CONTAINER_t & _pluginsContainer, const std::string & parameters, PLUGIN_EVENT_HANDLER eventHandler );
     static void clearPluginsContainer( PLUGIN_CONTAINER_t & _pluginsContainer );
+    static bool insertPluginToPluginsContainer( PLUGIN_APIS * plugin, PLUGIN_CONTAINER_t & pluginsContainer );
 
 };  // end of class CPluginsManager
 #endif  // end if #ifndef plugins_manager_h_

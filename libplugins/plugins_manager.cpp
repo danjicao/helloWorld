@@ -52,12 +52,6 @@ bool CPluginsManager::loadPluginsFrom( const boost::filesystem::path & _modulesD
             PLUGIN_APIS * plugin = new PLUGIN_APIS( file->path().string() );
             if( plugin->loadSymbols() ) {
                 printf("Load plugin: %s\n", file->path().string().c_str());
-                printf("    get_plugin_version   :%s\n", plugin->get_plugin_version());
-                printf("    get_plugin_revision  :%s\n", plugin->get_plugin_revision());
-                printf("    get_plugin_soversion :%s\n", plugin->get_plugin_soversion());
-                printf("    get_plugin_name      :%s\n", plugin->get_plugin_name());
-                printf("    get_plugin_type      :%s\n", plugin->get_plugin_type());
-                printf("    get_plugin_buildtime :%s\n", plugin->get_plugin_buildtime());
 
                 if ( 0 != strcmp(plugin->get_plugin_type(), PLUGIN_TYPE) ) {
                     printf("Error! Failed to load plugin: %s\n", file->path().string().c_str());
@@ -69,9 +63,19 @@ bool CPluginsManager::loadPluginsFrom( const boost::filesystem::path & _modulesD
                     printf("Error! Failed to load plugin: %s\n", file->path().string().c_str());
                 }
                 else {
+                    if ( insertPluginToPluginsContainer(plugin, _pluginsContainer) ) {
+                        printf("    get_plugin_version   :%s\n", plugin->get_plugin_version());
+                        printf("    get_plugin_revision  :%s\n", plugin->get_plugin_revision());
+                        printf("    get_plugin_soversion :%s\n", plugin->get_plugin_soversion());
+                        printf("    get_plugin_name      :%s\n", plugin->get_plugin_name());
+                        printf("    get_plugin_type      :%s\n", plugin->get_plugin_type());
+                        printf("    get_plugin_buildtime :%s\n", plugin->get_plugin_buildtime());
                     plugin->init(parameters.c_str(), eventHandler);
-                    _pluginsContainer.push_back(plugin);
                     plugin = NULL;
+                }
+                    else {
+                        printf("Skipped to insert plugin: %s\n", file->path().string().c_str());
+            }
                 }
             }
             else {
@@ -123,5 +127,17 @@ int CPluginsManager::doTask( const char * ) {
 
 PLUGIN_EVENT_HANDLER CPluginsManager::getEventHandler( void ) {
     return eventHandler;
+}
+
+
+bool CPluginsManager::insertPluginToPluginsContainer( PLUGIN_APIS * plugin, PLUGIN_CONTAINER_t & pluginsContainer ) {
+    for ( auto p = pluginsContainer.cbegin(); p != pluginsContainer.cend(); ++p ) {
+        if ( plugin->isEqual(*p) ) {
+            return false;
+        }
+    }
+
+    pluginsContainer.push_back(plugin);
+    return true;
 }
 

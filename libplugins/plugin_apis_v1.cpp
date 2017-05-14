@@ -177,3 +177,13 @@ int  PluginApisV1::free_response( char ** response ) {
     return PLUGIN_STATUS_ERROR_UNKNOWN;
 }
 
+
+bool PluginApisV1::isEqual(const PluginApisV1 * rhs ) const {
+    if ( 0 == strcmp( get_plugin_name(), rhs->get_plugin_name() )
+       && 0 == strcmp( get_plugin_soversion(), rhs->get_plugin_soversion() )
+       && 0 == strcmp( get_plugin_version(), rhs->get_plugin_version() )
+       ) {
+        return true;
+    }
+    return false;
+}

@@ -126,7 +126,7 @@ int CCALL main ( int argc, /*const*/ char * argv[], /*const*/ char* /*const*/ * 
 
         #ifdef ENABLE_PLUGINS
         if ( runAllSections || vm.count("plugins") ) {
-            libplugins_init("", PluginEventHandler);
+            libplugins_init("{}", PluginEventHandler);
             libplugins_deinit();
         }
         #endif

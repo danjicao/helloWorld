@@ -59,7 +59,7 @@ namespace {
         }
 
         if ( *response ) {
-            delete *response;
+            free(*response);
             *response = NULL;
         }
         return PLUGIN_STATUS_OK;

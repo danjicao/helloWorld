@@ -4,11 +4,17 @@
 
 
 PluginApisV1::PluginApisV1( const std::string & path )
-    : PluginApis(path) {
+    : PluginApis(path)
+    , options({}) {
 }
 
 
 PluginApisV1::~PluginApisV1() {
+}
+
+
+const json PluginApisV1::getOptions( void ) const {
+    return options;
 }
 
 
@@ -114,11 +120,28 @@ const char * PluginApisV1::get_plugin_buildtime( void ) const {
 
 
 int  PluginApisV1::init( const char * parameters, PLUGIN_EVENT_HANDLER eventHandler ) {
+    char * response = NULL;
     try{
         PLUGIN_INIT & func = pluginLib->get<PLUGIN_INIT>(transferFunctionName(PLUGIN_INIT_FUNCNAME));
-        return func(parameters, eventHandler);
+        int result =  func(parameters, eventHandler);
+
+        if ( PLUGIN_STATUS_OK == result ) {
+            json commandData = {
+                {"command", "OPTIONS"}
+            };
+
+            const std::string commandString = commandData.dump();
+
+            if ( PLUGIN_STATUS_OK == request_wait_response(commandString.c_str(), &response ) ) {
+                options = json::parse(response);
+            }
+
+            free_response(&response);
+        }
+        return result;
     }
     catch(...) {
+        free_response(&response);
     }
     return PLUGIN_STATUS_ERROR_UNKNOWN;
 }

@@ -4,6 +4,7 @@
 
 #include "plugin_apis.h"
 #include "libplugins_types.h"
+#include "thirdparty_json.h"
 
 
 class PluginApisV1: public PluginApis {
@@ -11,6 +12,7 @@ public:
     PluginApisV1( const std::string & path );
     virtual ~PluginApisV1();
 
+    const json getOptions( void ) const;
     virtual bool loadSymbols( void );
 
     const char * get_plugin_version( void ) const;
@@ -27,6 +29,8 @@ public:
     int  free_response( char ** );
 
     bool isEqual(const PluginApisV1 * rhs ) const;
+private:
+    json options;
 
 };  // end of class PluginApisV1
 

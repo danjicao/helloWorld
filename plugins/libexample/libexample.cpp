@@ -2,9 +2,22 @@
 #include "config.h"
 #include "libexample.h"
 #include "libplugins_events.h"
+#include "thirdparty_json.h"
 
 
 namespace {
+    const json pluginOptions = {
+        { "request",
+        },
+        { "request_wait_response",
+            {
+                "OPTIONS",
+            },
+        },
+        { "request_without_response",
+        },
+    };
+
     int init( const char * parameters, PLUGIN_EVENT_HANDLER eventHandler) {
         PLUGIN_UNUSED_PARAMETER(parameters);
         PLUGIN_UNUSED_PARAMETER(eventHandler);
@@ -26,9 +39,27 @@ namespace {
 
 
     int request_wait_response( const char * parameters, char ** response ) {
-        PLUGIN_UNUSED_PARAMETER(parameters);
-        PLUGIN_UNUSED_PARAMETER(response);
-        return PLUGIN_STATUS_ERROR_UNINIT;
+        if ( !parameters || !response ) {
+            return PLUGIN_STATUS_ERROR_INVALID_PARAMETERS;
+        }
+        json parametersJson = json::parse(parameters);
+        if ( parametersJson.is_null() ) {
+            return PLUGIN_STATUS_ERROR_INVALID_PARAMETERS;
+        }
+
+        std::string command = parametersJson["command"];
+
+        if ( "OPTIONS" == command ) {
+            json resultData = {
+                {"command", parametersJson["command"]},
+                {"response", pluginOptions},
+            };
+
+            *response = strdup(resultData.dump().c_str());
+            return PLUGIN_STATUS_OK;
+        }
+
+        return PLUGIN_STATUS_ERROR_UNSUPPORTED_COMMAND;
     }
 
 
@@ -43,7 +74,7 @@ namespace {
         }
 
         if ( *response ) {
-            delete *response;
+            free(*response);
             *response = NULL;
         }
         return PLUGIN_STATUS_OK;

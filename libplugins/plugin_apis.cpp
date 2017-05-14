@@ -72,7 +72,7 @@ bool PluginApis::loadSymbols( void ) {
 }
 
 
-std::string PluginApis::transferFunctionName( const std::string & funcName) {
+std::string PluginApis::transferFunctionName( const std::string & funcName) const {
     std::string syntheticName(pluginName);
     syntheticName.append("_");
     syntheticName.append(funcName);

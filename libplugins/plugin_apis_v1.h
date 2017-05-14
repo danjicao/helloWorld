@@ -13,12 +13,12 @@ public:
 
     virtual bool loadSymbols( void );
 
-    const char * get_plugin_version( void );
-    const char * get_plugin_revision( void );
-    const char * get_plugin_soversion( void );
-    const char * get_plugin_name( void );
-    const char * get_plugin_type( void );
-    const char * get_plugin_buildtime( void );
+    const char * get_plugin_version( void ) const;
+    const char * get_plugin_revision( void ) const;
+    const char * get_plugin_soversion( void ) const;
+    const char * get_plugin_name( void ) const;
+    const char * get_plugin_type( void ) const;
+    const char * get_plugin_buildtime( void ) const;
     int  init( const char *, PLUGIN_EVENT_HANDLER );
     void deinit( void );
     int  request( const char *, PLUGIN_RESPONSE_HANDLER );

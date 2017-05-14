@@ -47,7 +47,7 @@ bool PluginApisV1::loadSymbols( void ) {
 }
 
 
-const char * PluginApisV1::get_plugin_version( void ) {
+const char * PluginApisV1::get_plugin_version( void ) const {
     try{
         PLUGIN_GET_PLUGIN_VERSION & func = pluginLib->get<PLUGIN_GET_PLUGIN_VERSION>(transferFunctionName(PLUGIN_GET_PLUGIN_VERSION_FUNCNAME));
         return func();
@@ -58,7 +58,7 @@ const char * PluginApisV1::get_plugin_version( void ) {
 }
 
 
-const char * PluginApisV1::get_plugin_revision( void ) {
+const char * PluginApisV1::get_plugin_revision( void ) const {
     try{
         PLUGIN_GET_PLUGIN_REVISION & func = pluginLib->get<PLUGIN_GET_PLUGIN_REVISION>(transferFunctionName(PLUGIN_GET_PLUGIN_REVISION_FUNCNAME));
         return func();
@@ -69,7 +69,7 @@ const char * PluginApisV1::get_plugin_revision( void ) {
 }
 
 
-const char * PluginApisV1::get_plugin_soversion( void ) {
+const char * PluginApisV1::get_plugin_soversion( void ) const {
     try{
         PLUGIN_GET_PLUGIN_SOVERSION & func = pluginLib->get<PLUGIN_GET_PLUGIN_SOVERSION>(transferFunctionName(PLUGIN_GET_PLUGIN_SOVERSION_FUNCNAME));
         return func();
@@ -80,7 +80,7 @@ const char * PluginApisV1::get_plugin_soversion( void ) {
 }
 
 
-const char * PluginApisV1::get_plugin_name( void ) {
+const char * PluginApisV1::get_plugin_name( void ) const {
     try{
         PLUGIN_GET_PLUGIN_NAME & func = pluginLib->get<PLUGIN_GET_PLUGIN_NAME>(transferFunctionName(PLUGIN_GET_PLUGIN_NAME_FUNCNAME));
         return func();
@@ -91,7 +91,7 @@ const char * PluginApisV1::get_plugin_name( void ) {
 }
 
 
-const char * PluginApisV1::get_plugin_type( void ) {
+const char * PluginApisV1::get_plugin_type( void ) const {
     try{
         PLUGIN_GET_PLUGIN_TYPE & func = pluginLib->get<PLUGIN_GET_PLUGIN_TYPE>(transferFunctionName(PLUGIN_GET_PLUGIN_TYPE_FUNCNAME));
         return func();
@@ -102,7 +102,7 @@ const char * PluginApisV1::get_plugin_type( void ) {
 }
 
 
-const char * PluginApisV1::get_plugin_buildtime( void ) {
+const char * PluginApisV1::get_plugin_buildtime( void ) const {
     try{
         PLUGIN_GET_PLUGIN_BUILDTIME & func = pluginLib->get<PLUGIN_GET_PLUGIN_BUILDTIME>(transferFunctionName(PLUGIN_GET_PLUGIN_BUILDTIME_FUNCNAME));
         return func();

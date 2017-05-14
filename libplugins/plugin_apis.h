@@ -32,7 +32,7 @@ public:
 protected:
     boost::shared_ptr<boost::dll::shared_library> pluginLib;
     boost::shared_ptr<boost::dll::library_info> pluginInfo;
-    std::string transferFunctionName( const std::string & funcName);
+    std::string transferFunctionName( const std::string & funcName) const;
     bool has( const std::string & name );
 
 

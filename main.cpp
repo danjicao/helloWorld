@@ -204,7 +204,7 @@ int CCALL main ( int argc, /*const*/ char * argv[], /*const*/ char* /*const*/ * 
     po::variables_map vm;
     try {
         po::store(po::parse_command_line(argc, argv, desc), vm);
-        po::notify(vm);    
+        po::notify(vm);
 
         if ( vm.count("help") ) {
             std::cout << desc << std::endl;
@@ -212,7 +212,7 @@ int CCALL main ( int argc, /*const*/ char * argv[], /*const*/ char* /*const*/ * 
         }
 
         bool runAllSections( vm.count("all") > 0 );
-        
+
         if ( runAllSections || vm.count("version") ) {
             printf("%s ver. %s, rev. %s (%s)\n", PROJECT, PROJECT_VERSION, PROJECT_GIT_REVISION, PROJECT_BUILD_TIME);
             printf("%-10s ver. %s, rev. %s, sover. %s (%s)\n", libsysinfo_get_plugin_name(), libsysinfo_get_plugin_version(), libsysinfo_get_plugin_revision(), libsysinfo_get_plugin_soversion(), libsysinfo_get_plugin_buildtime());
@@ -246,7 +246,7 @@ int CCALL main ( int argc, /*const*/ char * argv[], /*const*/ char* /*const*/ * 
             libplugins_deinit();
         }
         #endif
-        
+
         if ( runAllSections || vm.count("printCompliedInfo") ) {
             libsysinfo_printCompliedInfo();
             libsysinfo_printByteOrderType();

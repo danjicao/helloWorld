@@ -99,11 +99,11 @@ size_t convertHex2Bin( std::istream & input, std::ostream & output, const CInfoC
         const char * pu = strchr(digits, tolower(u));
         if ( pu ) {
             numU = pu-digits;
-            info.debug("u[%2zu]=%d\n", index, numU);
+            info.debug("u[%2zu]=%d", index, numU);
         }
         else {
             result = false;
-            info.error("Error! Conversion failed at %zu (0x%02X).\n", index, u);
+            info.error("Error! Conversion failed at %zu (0x%02X).", index, u);
             break;
         }
 
@@ -122,16 +122,16 @@ size_t convertHex2Bin( std::istream & input, std::ostream & output, const CInfoC
         const char * pv = strchr(digits, tolower(v));
         if ( pv ) {
             numV = pv-digits;
-            info.debug("v[%2zu]=%d\n", index, numV);
+            info.debug("v[%2zu]=%d", index, numV);
         }
         else {
             result = false;
-            info.error("Error! Conversion failed at %zu (0x%02X).\n", index, v);
+            info.error("Error! Conversion failed at %zu (0x%02X).", index, v);
             break;
         }
 
         unsigned char num = numU << 4 | numV;
-        info.debug("u x 16 + v = %d = 0x%02X\n", num, num);
+        info.debug("u x 16 + v = %d = 0x%02X", num, num);
 
         if ( output ) {
             output << (unsigned char) num;
@@ -168,7 +168,7 @@ size_t convertBin2Hex( std::istream & input, std::ostream & output, const CInfoC
     }
 
     output << std::endl;
-    info.debug("total size=%zu\n", index);
+    info.debug("total size=%zu", index);
     return index;
 }
 
@@ -212,29 +212,29 @@ int CCALL main ( int argc, /*const*/ char * argv[], /*const*/ char* /*const*/ * 
         bool runAllSections( vm.count("all") > 0 );
 
         if ( runAllSections || vm.count("version") ) {
-            g_info.system("%s ver. %s, rev. %s (%s)\n", PROJECT, PROJECT_VERSION, PROJECT_GIT_REVISION, PROJECT_BUILD_TIME);
-            g_info.system("%-10s ver. %s, rev. %s, sover. %s (%s)\n", libsysinfo_get_plugin_name(), libsysinfo_get_plugin_version(), libsysinfo_get_plugin_revision(), libsysinfo_get_plugin_soversion(), libsysinfo_get_plugin_buildtime());
-            g_info.system("%-10s ver. %s, rev. %s, sover. %s (%s)\n", libhello_get_plugin_name(), libhello_get_plugin_version(), libhello_get_plugin_revision(), libhello_get_plugin_soversion(), libhello_get_plugin_buildtime());
+            g_info.system("%s ver. %s, rev. %s (%s)", PROJECT, PROJECT_VERSION, PROJECT_GIT_REVISION, PROJECT_BUILD_TIME);
+            g_info.system("%-10s ver. %s, rev. %s, sover. %s (%s)", libsysinfo_get_plugin_name(), libsysinfo_get_plugin_version(), libsysinfo_get_plugin_revision(), libsysinfo_get_plugin_soversion(), libsysinfo_get_plugin_buildtime());
+            g_info.system("%-10s ver. %s, rev. %s, sover. %s (%s)", libhello_get_plugin_name(), libhello_get_plugin_version(), libhello_get_plugin_revision(), libhello_get_plugin_soversion(), libhello_get_plugin_buildtime());
 
             #ifdef ENABLE_PLUGINS
-            g_info.system("%-10s ver. %s, rev. %s, sover. %s (%s)\n", libplugins_get_plugin_name(), libplugins_get_plugin_version(), libplugins_get_plugin_revision(), libplugins_get_plugin_soversion(), libplugins_get_plugin_buildtime());
+            g_info.system("%-10s ver. %s, rev. %s, sover. %s (%s)", libplugins_get_plugin_name(), libplugins_get_plugin_version(), libplugins_get_plugin_revision(), libplugins_get_plugin_soversion(), libplugins_get_plugin_buildtime());
             #endif
         }
 
         if ( runAllSections || vm.count("arguments") ) {
-            g_info.system(">>  arguments:\n");
-            g_info.system("    argc=%d\n", argc);
+            g_info.system(">>  arguments:");
+            g_info.system("    argc=%d", argc);
             for( int i = 0; i < argc; ++i )
             {
-                g_info.system( "    argv[%2d] = \"%s\"\n", i, argv[i] );
+                g_info.system( "    argv[%2d] = \"%s\"", i, argv[i] );
             }
         }
 
         if ( runAllSections || vm.count("env") ) {
-            g_info.system(">>  environment variables:\n");
+            g_info.system(">>  environment variables:");
             for (const char* const* env = envp; *env != NULL; ++env)
             {
-                g_info.system("    %s\n", *env);
+                g_info.system("    %s", *env);
             }
         }
 
@@ -248,12 +248,12 @@ int CCALL main ( int argc, /*const*/ char * argv[], /*const*/ char* /*const*/ * 
         if ( runAllSections || vm.count("printCompliedInfo") ) {
             libsysinfo_printCompliedInfo();
             libsysinfo_printByteOrderType();
-            g_info.system("libsysinfo_isCharSigned=%d\n", libsysinfo_isCharSigned());
+            g_info.system("libsysinfo_isCharSigned=%d", libsysinfo_isCharSigned());
         }
 
         if ( vm.count("verbose") ) {
             bool verbose = vm["verbose"].as<int>() != 0;
-            g_info.system("verbose=%d\n", verbose?1:0);
+            g_info.system("verbose=%d", verbose?1:0);
             g_info.setVerbose(verbose);
         }
 
@@ -273,19 +273,19 @@ int CCALL main ( int argc, /*const*/ char * argv[], /*const*/ char* /*const*/ * 
         }
 
 
-        g_info.system(">>  Appliction Begin\n");
+        g_info.system(">>  Appliction Begin");
 
 
         if ( !input.empty() ) {
             if ( '=' == input[0] ) {
                 input.erase(0, 1);
             }
-            g_info.system("input=%s\n", input.c_str());
+            g_info.system("input=%s", input.c_str());
         }
 
 
         if ( !output.empty() ) {
-            g_info.system("output=%s\n", output.c_str());
+            g_info.system("output=%s", output.c_str());
         }
 
 
@@ -294,7 +294,7 @@ int CCALL main ( int argc, /*const*/ char * argv[], /*const*/ char* /*const*/ * 
                 conversionMode.erase(0, 1);
             }
 
-            g_info.system("conversion-mode=%s\n", conversionMode.c_str());
+            g_info.system("conversion-mode=%s", conversionMode.c_str());
             bool result = false;
             FP_ConvertFunc convertFunc = NULL;
             if( 0 == strcmp(conversionMode.c_str(), "hex2bin") ) {
@@ -304,7 +304,7 @@ int CCALL main ( int argc, /*const*/ char * argv[], /*const*/ char* /*const*/ * 
                 convertFunc = convertBin2Hex;
             }
             else {
-                g_info.error("Error! There is invalid parameter '--conversion-mode=%s'.\n", conversionMode.c_str());
+                g_info.error("Error! There is invalid parameter '--conversion-mode=%s'.", conversionMode.c_str());
             }
 
             if ( convertFunc ) {
@@ -323,7 +323,7 @@ int CCALL main ( int argc, /*const*/ char * argv[], /*const*/ char* /*const*/ * 
                             pOutputBuf = ofs.rdbuf();
                         }
                         else {
-                            g_info.error("Error! There is invalid parameter '--output' (file can't open).\n");
+                            g_info.error("Error! There is invalid parameter '--output' (file can't open).");
                             break;
                         }
                     }
@@ -337,7 +337,7 @@ int CCALL main ( int argc, /*const*/ char * argv[], /*const*/ char* /*const*/ * 
                             pInputStream = &ifs;
                         }
                         else {
-                            g_info.error("Error! There is invalid parameter '--input' (file can't open).\n");
+                            g_info.error("Error! There is invalid parameter '--input' (file can't open).");
                             break;
                         }
                     }
@@ -359,7 +359,7 @@ int CCALL main ( int argc, /*const*/ char * argv[], /*const*/ char* /*const*/ * 
             }
 
             if ( result ) {
-                g_info.system("Conversion OK!\n");
+                g_info.system("Conversion OK!");
             }
         }
 
@@ -367,7 +367,7 @@ int CCALL main ( int argc, /*const*/ char * argv[], /*const*/ char* /*const*/ * 
         DoSomethingInMainBody();
 
 
-        g_info.system(">>  Appliction Finish\n");
+        g_info.system(">>  Appliction Finish");
 
 
     } catch ( const po::unknown_option& e ) {
@@ -391,13 +391,13 @@ int CCALL main ( int argc, /*const*/ char * argv[], /*const*/ char* /*const*/ * 
 
 void beforeMain( void )
 {
-    g_info.system(">>  Before Main\n");
+    g_info.system(">>  Before Main");
 }
 
 
 void afterMain( void )
 {
-    g_info.system(">>  After Main\n");
+    g_info.system(">>  After Main");
 }
 
 

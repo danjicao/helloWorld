@@ -2,3 +2,7 @@
 	path = thirdparty/json
 	url = https://github.com/nlohmann/json.git
 	branch = master
+[submodule "thirdparty/termcolor"]
+	path = thirdparty/termcolor
+	url = https://github.com/ikalnytskyi/termcolor.git
+	branch = master

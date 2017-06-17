@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <iostream>
 #include <fstream>
+#include <iomanip>
 #include "config.h"
 #include "libhello/libhello.h"
 #include "libsysinfo/libsysinfo.h"
@@ -70,48 +71,61 @@ int PluginEventHandler( const char * ) {
 }
 #endif
 
-bool convertHex2Bin( const std::string & input, const std::string & output, bool verbose ) {
+
+typedef size_t (* FP_ConvertFunc)( std::istream & input, std::ostream & output, bool verbose );
+
+
+size_t convertHex2Bin( std::istream & input, std::ostream & output, bool verbose ) {
     bool result = true;
     const char digits[] = "0123456789abcdef";
-    std::ofstream ofs;
-    ofs.open(output.c_str(), std::ios_base::binary|std::ios_base::out|std::ios_base::trunc);
-    if ( ofs.is_open() ) {
-        printf("Open output file: %s\n", output.c_str());
-    }
+    size_t index = 0;
+    char u,v;
+    unsigned char numU = 0, numV = 0;
 
-    size_t index=0;
-    for ( std::string::const_iterator ch = input.cbegin(); ch != input.cend(); ) {
-        unsigned char numU = 0, numV = 0;
-        const char * u = strchr(digits, tolower(*ch));
-        if ( u ) {
-            numU = u-digits;
+    while ( ! input.eof() ) {
+        u = input.get();
+        input.peek();
+        if ( 0x0A == u || 0x0D == u ) {
+            continue;
+        }
+        ++index;
+
+        const char * pu = strchr(digits, tolower(u));
+        if ( pu ) {
+            numU = pu-digits;
             if ( verbose ) {
-                printf("u[%2d]=%d\n", index, numU);
+                printf("u[%2zu]=%d\n", index, numU);
             }
         }
         else {
             result = false;
-            printf("Error! Conversion failed at %d (%c).\n", index, *ch);
+            printf("Error! Conversion failed at %zu (0x%02X).\n", index, u);
             break;
         }
-        ++ch;
-        ++index;
-        const char * v = digits;
-        if ( ch != input.cend() ) {
-            v = strchr(digits, tolower(*ch));
-            if ( v ) {
-                numV = v-digits;
-                if ( verbose ) {
-                    printf("v[%2d]=%d\n", index, numV);
-                }
+
+        if ( input ) {
+            v = input.get();
+            input.peek();
+            if ( 0x0A == u || 0x0D == u ) {
+                v = '0';
             }
-            else {
-                result = false;
-                printf("Error! Conversion failed at %d (%c).\n", index, *ch);
-                break;
-            }
-            ++ch;
             ++index;
+        }
+        else {
+            v = '0';
+        }
+
+        const char * pv = strchr(digits, tolower(v));
+        if ( pv ) {
+            numV = pv-digits;
+            if ( verbose ) {
+                printf("v[%2zu]=%d\n", index, numV);
+            }
+        }
+        else {
+            result = false;
+            printf("Error! Conversion failed at %zu (0x%02X).\n", index, v);
+            break;
         }
 
         unsigned char num = numU << 4 | numV;
@@ -119,62 +133,46 @@ bool convertHex2Bin( const std::string & input, const std::string & output, bool
             printf("u x 16 + v = %d = 0x%02X\n", num, num);
         }
 
-        if ( ofs.is_open() ) {
-            if ( verbose ) {
-                printf("Close output file: %s.\n", output.c_str());
-            }
-            ofs << (unsigned char) num;
+        if ( output ) {
+            output << (unsigned char) num;
         }
     }
 
-    if ( ofs.is_open() ) {
-        ofs.close();
-    }
-
-    return result;
+    return result?index:0;
 }
 
 
-bool convertBin2Hex( const std::string & input, const std::string & output, bool verbose ) {
-    bool result = true;
-    const char digits[] = "0123456789abcdef";
-    std::ifstream ifs(input.c_str(), std::ifstream::in);
+size_t convertBin2Hex( std::istream & input, std::ostream & output, bool verbose ) {
+    const size_t colCount = 16;
+    size_t row = 0;
+    size_t col = 0;
+    size_t index = 0;
+    char c;
 
-    if ( ifs.is_open() ) {
-        printf("Open input file: %s.\n", input.c_str());
-
-        const size_t colCount = 16;
-        size_t row = 0, col = 0;
-        size_t index = 0;
-        char c = ifs.get();
-
-        while (ifs.good()) {
-            if ( 0 == col ) {
-                //printf("[%10d][%10d]", row, index);
-                printf("[%10d]", row);
-            }
-            printf(" %02X", c);
-            c = ifs.get();
-            ++index;
-            ++col;
-
-            if ( colCount == col ) {
-                printf("\n");
-                col = 0;
-                ++row;
-            }
+    while ( ! input.eof() ) {
+        if ( 0 == col ) {
+            output << "[" << std::setfill(' ') << std::setw(10) << std::dec << row << "]";
         }
-        printf("\n");
-        printf("total size=%d\n", index);
 
-        ifs.close();
-    }
-    else {
-        result = false;
-        printf("Error! Failed to open input file: %s\n", input.c_str());
+        c = input.get();
+        output << " " << std::setfill('0') << std::setw(2) << std::hex << std::uppercase << static_cast<unsigned int>(c);
+        input.peek();
+        ++index;
+        ++col;
+
+        if ( colCount == col ) {
+            //printf("\n");
+            output << std::endl;
+            col = 0;
+            ++row;
+        }
     }
 
-    return result;
+    output << std::endl;
+    if ( verbose ) {
+        printf("total size=%zu\n", index);
+    }
+    return index;
 }
 
 
@@ -296,22 +294,67 @@ int CCALL main ( int argc, /*const*/ char * argv[], /*const*/ char* /*const*/ * 
             }
 
             printf("conversion-mode=%s\n", conversionMode.c_str());
-            bool result = true;
-            if ( !input.empty() ) {
-                if( 0 == strcmp(conversionMode.c_str(), "hex2bin") ) {
-                    result = convertHex2Bin(input, output, verbose);
-                }
-                else if( 0 == strcmp(conversionMode.c_str(), "bin2hex") ) {
-                    result = convertBin2Hex(input, output, verbose);
-                }
-                else {
-                    result = false;
-                    printf("Error! There is invalid parameter '--conversion-mode=%s'.\n", conversionMode.c_str());
-                }
+            bool result = false;
+            FP_ConvertFunc convertFunc = NULL;
+            if( 0 == strcmp(conversionMode.c_str(), "hex2bin") ) {
+                convertFunc = convertHex2Bin;
+            }
+            else if( 0 == strcmp(conversionMode.c_str(), "bin2hex") ) {
+                convertFunc = convertBin2Hex;
             }
             else {
-                result = false;
-                printf("Error! There is invalid parameter '--input' (empty string).\n");
+                printf("Error! There is invalid parameter '--conversion-mode=%s'.\n", conversionMode.c_str());
+            }
+
+            if ( convertFunc ) {
+                std::streambuf * pOutputBuf = NULL;
+                std::ofstream ofs;
+                std::istream * pInputStream = NULL;
+                std::ifstream ifs;
+
+                do{
+                    if ( output.empty() ) {
+                        pOutputBuf = std::cout.rdbuf();
+                    }
+                    else {
+                        ofs.open(output.c_str(), std::ios_base::out | std::ios_base::binary | std::ios_base::trunc );
+                        if ( ofs.is_open() ) {
+                            pOutputBuf = ofs.rdbuf();
+                        }
+                        else {
+                            printf("Error! There is invalid parameter '--output' (file can't open).\n");
+                            break;
+                        }
+                    }
+
+                    if ( input.empty() || "-" == input ) {
+                        pInputStream = & std::cin;
+                    }
+                    else {
+                        ifs.open( input.c_str(), std::ios_base::in );
+                        if ( ifs.is_open() ) {
+                            pInputStream = &ifs;
+                        }
+                        else {
+                            printf("Error! There is invalid parameter '--input' (file can't open).\n");
+                            break;
+                        }
+                    }
+
+                    std::ostream outstream(pOutputBuf);
+                    size_t convertedSize = convertFunc(*pInputStream, outstream, verbose);
+                    if ( 0 < convertedSize ) {
+                        result = true;
+                    }
+                } while (0);
+
+                if ( ifs.is_open() ) {
+                    ifs.close();
+                }
+
+                if ( ofs.is_open() ) {
+                    ofs.close();
+                }
             }
 
             if ( result ) {

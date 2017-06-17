@@ -265,41 +265,41 @@ int CCALL main ( int argc, /*const*/ char * argv[], /*const*/ char* /*const*/ * 
 
         if ( vm.count("conversion-mode") ) {
             conversionMode = vm["conversion-mode"].as<std::string>();
+            if ( !conversionMode.empty() ) {
+                if ( '=' == conversionMode[0] ) {
+                    conversionMode.erase(0, 1);
+                }
+
+                g_info.system("--conversion-mode=%s", conversionMode.c_str());
+            }
         }
 
 
         if ( vm.count("input") ) {
             input = vm["input"].as<std::string>();
+
+            if ( !input.empty() ) {
+                if ( '=' == input[0] ) {
+                    input.erase(0, 1);
+                }
+                g_info.system("--input=%s", input.c_str());
+            }
         }
 
 
         if ( vm.count("output") ) {
             output = vm["output"].as<std::string>();
+
+            if ( !output.empty() ) {
+                g_info.system("--output=%s", output.c_str());
+            }
         }
 
 
         g_info.system(">>  Appliction Begin");
 
 
-        if ( !input.empty() ) {
-            if ( '=' == input[0] ) {
-                input.erase(0, 1);
-            }
-            g_info.system("--input=%s", input.c_str());
-        }
-
-
-        if ( !output.empty() ) {
-            g_info.system("--output=%s", output.c_str());
-        }
-
-
         if ( !conversionMode.empty() ) {
-            if ( '=' == conversionMode[0] ) {
-                conversionMode.erase(0, 1);
-            }
-
-            g_info.system("--conversion-mode=%s", conversionMode.c_str());
             bool result = false;
             FP_ConvertFunc convertFunc = NULL;
             if( 0 == strcmp(conversionMode.c_str(), "hex2bin") ) {

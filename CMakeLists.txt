@@ -61,6 +61,7 @@ FIND_PACKAGE( Boost 1.63 COMPONENTS program_options REQUIRED )
 
 SET (HELLOWORLD_SRCS
     main.cpp
+    infocollector.cpp
 )
 
 
@@ -72,7 +73,7 @@ ADD_SUBDIRECTORY (libsysinfo)
 INCLUDE_DIRECTORIES(
     "${PROJECT_SOURCE_DIR}"
     "${PROJECT_BINARY_DIR}"
-) 
+)
 
 
 ADD_EXECUTABLE (${PROJECT_NAME}

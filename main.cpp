@@ -190,7 +190,7 @@ int CCALL main ( int argc, /*const*/ char * argv[], /*const*/ char* /*const*/ * 
     #endif
         ("printCompliedInfo", "print complied information")
         ("verbose", po::value<int>()->default_value(0)->implicit_value(1), "verbosity level")
-        ("conversion-mode,c", po::value<std::string>()->default_value("hex2bin")->implicit_value("hex2bin"), "convert hex string to bin")
+        ("conversion-mode,c", po::value<std::string>()->default_value("")->implicit_value("hex2bin"), "convert hex string to bin")
         ("input,i" , po::value<std::string>()->default_value("")->implicit_value(""), "input")
         ("output,o", po::value<std::string>()->default_value("")->implicit_value(""), "output")
     ;

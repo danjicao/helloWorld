@@ -90,6 +90,7 @@ SET_TARGET_PROPERTIES (${PROJECT_NAME}
 TARGET_INCLUDE_DIRECTORIES( ${PROJECT_NAME}
     PRIVATE "${CMAKE_SOURCE_DIR}/thirdparty/json/src"
     PUBLIC  "${Boost_INCLUDE_DIR}"
+    PRIVATE "${CMAKE_SOURCE_DIR}/thirdparty/termcolor/include"
 )
 
 

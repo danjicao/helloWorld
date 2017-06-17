@@ -1,19 +1,5 @@
 #include "infocollector.h"
-#include <cstdarg>
-#include <cstdio>
-#include <string>
-#include <iostream>
-
-
-// https://en.wikipedia.org/wiki/ANSI_escape_code#Colors
-// https://stackoverflow.com/questions/3219393/stdlib-and-colored-output-in-c
-#define ANSI_COLOR_RED     "\x1b[31m"
-#define ANSI_COLOR_GREEN   "\x1b[32m"
-#define ANSI_COLOR_YELLOW  "\x1b[33m"
-#define ANSI_COLOR_BLUE    "\x1b[34m"
-#define ANSI_COLOR_MAGENTA "\x1b[35m"
-#define ANSI_COLOR_CYAN    "\x1b[36m"
-#define ANSI_COLOR_RESET   "\x1b[0m"
+#include <termcolor/termcolor.hpp>
 
 
 CInfoCollector::CInfoCollector( bool verbose )
@@ -30,57 +16,51 @@ CInfoCollector::~CInfoCollector() {
 
 void CInfoCollector::debug( const char * fmt, ... ) const {
     if ( m_bVerbose ){
+        std::cout << termcolor::green;
         va_list valist;
         va_start(valist, fmt);
-        std::string newFmt(ANSI_COLOR_GREEN);
-        newFmt.append(fmt);
-        newFmt.append(ANSI_COLOR_RESET);
-        newFmt.append("\n");
-        int res = vfprintf(stdout, newFmt.c_str(), valist);
+        int res = vfprintf(stdout, fmt, valist);
         if ( res <= 0 ) {
             // error
         }
         va_end (valist);
+        std::cout << termcolor::reset << std::endl;
     }
 }
 
 
 void CInfoCollector::error( const char * fmt, ... ) const {
+    std::cerr << termcolor::red;
     va_list valist;
     va_start(valist, fmt);
-    std::string newFmt(ANSI_COLOR_RED);
-    newFmt.append(fmt);
-    newFmt.append(ANSI_COLOR_RESET);
-    newFmt.append("\n");
-    int res = vfprintf(stderr, newFmt.c_str(), valist);
+    int res = vfprintf(stderr, fmt, valist);
     if ( res <= 0 ) {
         // error
     }
     va_end (valist);
+    std::cerr << termcolor::reset << std::endl;
 }
 
 
 void CInfoCollector::system( const char * fmt, ... ) const {
+    std::cout << termcolor::cyan;
     va_list valist;
     va_start(valist, fmt);
-    std::string newFmt(ANSI_COLOR_CYAN);
-    newFmt.append(fmt);
-    newFmt.append(ANSI_COLOR_RESET);
-    newFmt.append("\n");
-    int res = vfprintf(stdout, newFmt.c_str(), valist);
+    int res = vfprintf(stdout, fmt, valist);
     if ( res <= 0 ) {
         // error
     }
     va_end (valist);
+    std::cout << termcolor::reset << std::endl;
 }
 
 
 void CInfoCollector::options( boost::program_options::options_description & desc ) {
-    std::cout << ANSI_COLOR_YELLOW;
+    std::cout << termcolor::yellow;
     std::streambuf * pOutputBuf = std::cout.rdbuf();
     std::ostream outstream(pOutputBuf);
     desc.print(outstream);
-    std::cout << ANSI_COLOR_RESET << std::endl;
+    std::cout << termcolor::reset << std::endl;
 }
 
 

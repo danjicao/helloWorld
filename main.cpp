@@ -210,8 +210,12 @@ int CCALL main ( int argc, /*const*/ char * argv[], /*const*/ char* /*const*/ * 
         }
 
         bool runAllSections( vm.count("all") > 0 );
+        if ( runAllSections ) {
+            g_info.system("--all");
+        }
 
         if ( runAllSections || vm.count("version") ) {
+            g_info.system(">> version:");
             g_info.system("%s ver. %s, rev. %s (%s)", PROJECT, PROJECT_VERSION, PROJECT_GIT_REVISION, PROJECT_BUILD_TIME);
             g_info.system("%-10s ver. %s, rev. %s, sover. %s (%s)", libsysinfo_get_plugin_name(), libsysinfo_get_plugin_version(), libsysinfo_get_plugin_revision(), libsysinfo_get_plugin_soversion(), libsysinfo_get_plugin_buildtime());
             g_info.system("%-10s ver. %s, rev. %s, sover. %s (%s)", libhello_get_plugin_name(), libhello_get_plugin_version(), libhello_get_plugin_revision(), libhello_get_plugin_soversion(), libhello_get_plugin_buildtime());
@@ -240,6 +244,7 @@ int CCALL main ( int argc, /*const*/ char * argv[], /*const*/ char* /*const*/ * 
 
         #ifdef ENABLE_PLUGINS
         if ( runAllSections || vm.count("plugins") ) {
+            g_info.system("--plugins");
             libplugins_init("{}", PluginEventHandler);
             libplugins_deinit();
         }
@@ -253,7 +258,7 @@ int CCALL main ( int argc, /*const*/ char * argv[], /*const*/ char* /*const*/ * 
 
         if ( vm.count("verbose") ) {
             bool verbose = vm["verbose"].as<int>() != 0;
-            g_info.system("verbose=%d", verbose?1:0);
+            g_info.system("--verbose=%d", verbose?1:0);
             g_info.setVerbose(verbose);
         }
 
@@ -280,12 +285,12 @@ int CCALL main ( int argc, /*const*/ char * argv[], /*const*/ char* /*const*/ * 
             if ( '=' == input[0] ) {
                 input.erase(0, 1);
             }
-            g_info.system("input=%s", input.c_str());
+            g_info.system("--input=%s", input.c_str());
         }
 
 
         if ( !output.empty() ) {
-            g_info.system("output=%s", output.c_str());
+            g_info.system("--output=%s", output.c_str());
         }
 
 
@@ -294,7 +299,7 @@ int CCALL main ( int argc, /*const*/ char * argv[], /*const*/ char* /*const*/ * 
                 conversionMode.erase(0, 1);
             }
 
-            g_info.system("conversion-mode=%s", conversionMode.c_str());
+            g_info.system("--conversion-mode=%s", conversionMode.c_str());
             bool result = false;
             FP_ConvertFunc convertFunc = NULL;
             if( 0 == strcmp(conversionMode.c_str(), "hex2bin") ) {

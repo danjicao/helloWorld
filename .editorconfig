@@ -34,3 +34,6 @@ indent_style = tab
 [*.md]
 trim_trailing_whitespace = false
 
+[*.{c,h,cpp,hpp,cc,hh,cxx,hxx}]
+indent_size = 4
+

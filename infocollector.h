@@ -10,8 +10,11 @@ class CInfoCollector{
         CInfoCollector( bool verbose );
         ~CInfoCollector();
 
+        void trace( const char * fmt, ... ) const;
         void debug( const char * fmt, ... ) const;
+        void warning( const char * fmt, ... ) const;
         void error( const char * fmt, ... ) const;
+        void fatal( const char * fmt, ... ) const;
         void system( const char * fmt, ... ) const;
         void options( boost::program_options::options_description & desc );
         void setVerbose( bool verbose );

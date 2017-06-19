@@ -1,4 +1,5 @@
 #include "infocollector.h"
+#include <cstdarg>
 #include <termcolor/termcolor.hpp>
 
 

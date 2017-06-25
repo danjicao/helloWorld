@@ -299,7 +299,7 @@ int CCALL main ( int argc, /*const*/ char * argv[], /*const*/ char* /*const*/ * 
         }
 
         if ( runAllSections || vm.count("hello") ) {
-            helloTo = vm["hello"].as<std::string>();
+            helloTo = vm.count("hello")?vm["hello"].as<std::string>():"World";
         }
 
         if ( vm.count("verbose") ) {

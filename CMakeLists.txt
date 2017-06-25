@@ -5,6 +5,7 @@ OPTION (enable_shared_libsysinfo "enable shared libsysinfo" ON)
 OPTION (enable_shared_libhello "enable shared libhello" ON)
 OPTION (enable_plugins "enable plugins" ON)
 OPTION (enable_shared_libplugins "enable shared libplugins" ON)
+OPTION (enable_libpoco "enable poco library" ON)
 
 
 IF (CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
@@ -57,6 +58,34 @@ SET (Boost_USE_STATIC_LIBS OFF)
 SET (Boost_USE_MULTITHREADED ON)
 SET (Boost_USE_STATIC_RUNTIME OFF)
 FIND_PACKAGE( Boost 1.63 COMPONENTS program_options REQUIRED )
+
+
+IF ( enable_libpoco )
+    ADD_DEFINITIONS(
+            -DENABLE_LIBPOCO
+    )
+
+    ## the directory ${POCO_PREFIX} containing "include" and "lib"
+    IF ( APPLE )
+        EXECUTE_PROCESS (
+            COMMAND brew --prefix poco
+            OUTPUT_VARIABLE POCO_PREFIX
+        )
+        STRING (REGEX REPLACE "\n$" "" POCO_PREFIX "${POCO_PREFIX}")
+        #SET (POCO_PREFIX "/usr/local/opt/poco")
+        #SET (POCO_PREFIX "/usr/local/Cellar/poco/1.7.8p1")
+    ELSE ()
+        SET (POCO_PREFIX  "/usr")
+    ENDIF ()
+
+    MESSAGE ("POCO_PREFIX: ${POCO_PREFIX}")
+    SET (POCO_INCLUDE_DIR "${POCO_PREFIX}/include")
+    MESSAGE ("POCO_INCLUDE_DIR: ${POCO_INCLUDE_DIR}")
+    SET (POCO_LIB_DIR     "${POCO_PREFIX}/lib")
+    MESSAGE ("POCO_LIB_DIR: ${POCO_LIB_DIR}")
+    SET (POCO_LIBS        "-L${POCO_LIB_DIR} -lPocoFoundation")
+    MESSAGE ("POCO_LIBS: ${POCO_LIBS}")
+ENDIF ()
 
 
 SET (HELLOWORLD_SRCS
@@ -133,6 +162,17 @@ IF (enable_plugins)
     ELSE ()
         TARGET_LINK_LIBRARIES (${PROJECT_NAME} libplugins-static)
     ENDIF ()
+ENDIF ()
+
+
+IF ( enable_libpoco )
+    TARGET_INCLUDE_DIRECTORIES( ${PROJECT_NAME}
+        PRIVATE "${POCO_INCLUDE_DIR}"
+    )
+
+    TARGET_LINK_LIBRARIES( ${PROJECT_NAME}
+        ${POCO_LIBS}
+    )
 ENDIF ()
 
 

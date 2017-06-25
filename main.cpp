@@ -11,6 +11,12 @@
 #include "libplugins/libplugins.h"
 #endif
 
+#ifdef ENABLE_LIBPOCO
+    #include <Poco/UUIDGenerator.h>
+    using namespace Poco;
+#else
+    #include <uuid/uuid.h>
+#endif
 
 #include <boost/program_options.hpp>
 namespace po = boost::program_options;
@@ -171,6 +177,28 @@ size_t convertBin2Hex( std::istream & input, std::ostream & output, const CInfoC
 }
 
 
+size_t generateUUID( std::istream & input, std::ostream & output, const CInfoCollector & info ) {
+    std::string result;
+
+    #ifdef ENABLE_LIBPOCO
+    UUIDGenerator uuidGenerator;
+    UUID uuid = uuidGenerator.createRandom();
+    result = uuid.toString();
+    #else
+    char uuid_str[37] = {'\0'};
+    uuid_t uuid;
+    uuid_generate_random(uuid);
+    uuid_unparse_lower(uuid, uuid_str);
+    result.assign(uuid_str);
+    #endif
+
+    if ( ! result.empty() ) {
+        output << result.c_str() << std::endl;
+    }
+    return result.size();
+}
+
+
 }    // end of namespace {
 
 
@@ -317,6 +345,9 @@ int CCALL main ( int argc, /*const*/ char * argv[], /*const*/ char* /*const*/ * 
             }
             else if( 0 == strcmp(conversionMode.c_str(), "bin2hex") ) {
                 convertFunc = convertBin2Hex;
+            }
+            else if( 0 == strcmp(conversionMode.c_str(), "uuid") ) {
+                convertFunc = generateUUID;
             }
             else {
                 g_info.error("Error! There is invalid parameter '--conversion-mode=%s'.", conversionMode.c_str());

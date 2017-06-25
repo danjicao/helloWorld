@@ -362,9 +362,6 @@ int CCALL main ( int argc, /*const*/ char * argv[], /*const*/ char* /*const*/ * 
             else if( 0 == ::icompare(conversionMode, "bin2hex") ) {
                 convertFunc = convertBin2Hex;
             }
-            else if( 0 == ::icompare(conversionMode, "bin2base64") ) {
-                convertFunc = convertBin2Base64;
-            }
             else if( 0 == ::icompare(conversionMode, "uuid") ) {
                 convertFunc = generateUUID;
             }

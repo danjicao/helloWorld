@@ -189,7 +189,7 @@ int CCALL main ( int argc, /*const*/ char * argv[], /*const*/ char* /*const*/ * 
         ("plugins,p", "enable plugins system")
     #endif
         ("printCompliedInfo", "print complied information")
-        ("verbose,v", po::value<int>()->default_value(0)->implicit_value(1), "verbosity level")
+        ("verbose,v", po::value<int>()->implicit_value(1), "verbosity level")
         ("conversion-mode,c", po::value<std::string>()->default_value("")->implicit_value("hex2bin"), "convert hex string to bin")
         ("input,i" , po::value<std::string>()->default_value("")->implicit_value(""), "input")
         ("output,o", po::value<std::string>()->default_value("")->implicit_value(""), "output")

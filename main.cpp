@@ -250,10 +250,18 @@ int CCALL main ( int argc, /*const*/ char * argv[], /*const*/ char* /*const*/ * 
             return 1;
         }
 
+        if ( vm.count("verbose") ) {
+            bool verbose = vm["verbose"].as<int>() != 0;
+            g_info.setVerbose(verbose);
+            g_info.trace("--verbose=%d", verbose?1:0);
+        }
+
+
         bool runAllSections( vm.count("all") > 0 );
         if ( runAllSections ) {
-            g_info.system("--all");
+            g_info.trace("--all");
         }
+
 
         if ( runAllSections || vm.count("version") ) {
             g_info.system(">> version:");
@@ -285,7 +293,7 @@ int CCALL main ( int argc, /*const*/ char * argv[], /*const*/ char* /*const*/ * 
 
         #ifdef ENABLE_PLUGINS
         if ( runAllSections || vm.count("plugins") ) {
-            g_info.system("--plugins");
+            g_info.trace("--plugins");
             libplugins_init("{}", PluginEventHandler);
             libplugins_deinit();
         }
@@ -302,12 +310,6 @@ int CCALL main ( int argc, /*const*/ char * argv[], /*const*/ char* /*const*/ * 
             helloTo = vm.count("hello")?vm["hello"].as<std::string>():"World";
         }
 
-        if ( vm.count("verbose") ) {
-            bool verbose = vm["verbose"].as<int>() != 0;
-            g_info.system("--verbose=%d", verbose?1:0);
-            g_info.setVerbose(verbose);
-        }
-
 
         if ( vm.count("conversion-mode") ) {
             conversionMode = vm["conversion-mode"].as<std::string>();
@@ -316,7 +318,7 @@ int CCALL main ( int argc, /*const*/ char * argv[], /*const*/ char* /*const*/ * 
                     conversionMode.erase(0, 1);
                 }
 
-                g_info.system("--conversion-mode=%s", conversionMode.c_str());
+                g_info.trace("--conversion-mode=%s", conversionMode.c_str());
             }
         }
 
@@ -328,7 +330,7 @@ int CCALL main ( int argc, /*const*/ char * argv[], /*const*/ char* /*const*/ * 
                 if ( '=' == input[0] ) {
                     input.erase(0, 1);
                 }
-                g_info.system("--input=%s", input.c_str());
+                g_info.trace("--input=%s", input.c_str());
             }
         }
 
@@ -337,7 +339,7 @@ int CCALL main ( int argc, /*const*/ char * argv[], /*const*/ char* /*const*/ * 
             output = vm["output"].as<std::string>();
 
             if ( !output.empty() ) {
-                g_info.system("--output=%s", output.c_str());
+                g_info.trace("--output=%s", output.c_str());
             }
         }
 

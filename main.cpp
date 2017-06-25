@@ -61,7 +61,7 @@ static void afterMain( void );
 
 
 #else
-    #error "Unknown Complier. Please specify incluing file in the main.cpp."
+    #error "Unknown Complier. Please specify including file in the main.cpp."
 #endif
 
 

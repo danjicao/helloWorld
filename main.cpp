@@ -405,7 +405,7 @@ int CCALL main ( int argc, /*const*/ char * argv[], /*const*/ char* /*const*/ * 
             }
 
             if ( result ) {
-                g_info.system("Conversion OK!");
+                g_info.trace("Conversion OK!");
             }
         }
 

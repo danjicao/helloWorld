@@ -282,6 +282,7 @@ int CCALL main ( int argc, /*const*/ char * argv[], /*const*/ char* /*const*/ * 
             libsysinfo_printCompliedInfo();
             libsysinfo_printByteOrderType();
             g_info.system("libsysinfo_isCharSigned=%d", libsysinfo_isCharSigned());
+            g_info.system("libsysinfo_getOsInfo=%s", libsysinfo_getOsInfo());
         }
 
         if ( runAllSections || vm.count("hello") ) {

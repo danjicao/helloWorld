@@ -63,6 +63,9 @@ LIBSYSINFO_API void libsysinfo_printByteOrderType ( void );
 
 LIBSYSINFO_API int libsysinfo_isCharSigned ( void );
 
+LIBSYSINFO_API const char * libsysinfo_getOsInfo ( void );
+
+
 
 #ifdef __cplusplus
 }   // end of extern "C" {

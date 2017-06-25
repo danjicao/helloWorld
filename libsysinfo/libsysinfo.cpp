@@ -3,6 +3,11 @@
 #include <cstdio>
 #include <cstdarg>
 #include <stdint.h>
+#include <string>
+
+#ifdef ENABLE_LIBPOCO
+    #include <Poco/Environment.h>
+#endif
 
 #ifdef __ANDROID__
     #include <android/api-level.h>
@@ -18,6 +23,17 @@
 
 
 namespace {
+
+#ifdef ENABLE_LIBPOCO
+const std::string OsInfo = "{\"osArchitecture\":\"" + Poco::Environment::osArchitecture()
+                + "\", \"osDisplayName\":\"" + Poco::Environment::osDisplayName()
+                + "\", \"osName\":\"" + Poco::Environment::osName()
+                + "\", \"osVersion\":\"" + Poco::Environment::osVersion()
+                + "\"}";
+#else
+const std::string OsInfo =  "{\"osArchitecture\":\"Unknown\", \"osDisplayName\":\"Unknown\", \"osName\":\"Unknown\", \"osVersion\":\"Unknown\"}";
+#endif
+
 
 void print(const char * fmt, ...)
 {
@@ -499,3 +515,6 @@ LIBSYSINFO_API int libsysinfo_isCharSigned ( void ) {
     return (negativeOne < 0)?1:0;
 }
 
+LIBSYSINFO_API const char * libsysinfo_getOsInfo ( void ) {
+    return OsInfo.c_str();
+}

@@ -197,6 +197,9 @@ size_t generateUUID( std::istream & input, std::ostream & output, const CInfoCol
     UUIDGenerator uuidGenerator;
     UUID uuid = uuidGenerator.createRandom();
     result = uuid.toString();
+    #elif defined  _MSC_VER
+    // TODO: implement generateUUID for windows
+    #error "Error! generateUUID not yet implemented."
     #else
     char uuid_str[37] = {'\0'};
     uuid_t uuid;

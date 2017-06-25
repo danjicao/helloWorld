@@ -60,8 +60,6 @@ static void afterMain( void );
 
 void DoSomethingInMainBody( void )
 {
-    libhello_helloTo("World");
-    //libhello_HiddenMe(); // Hence, HiddenMe should NOT be called.
 }
 
 
@@ -181,6 +179,7 @@ int CCALL main ( int argc, /*const*/ char * argv[], /*const*/ char* /*const*/ * 
     po::options_description desc("Allowed options");
     desc.add_options()
         ("help,h", "produce help message")
+        ("hello", po::value<std::string>()->implicit_value("World"), "print hello message")
         ("version", "show version")
         ("all,a", "run all sections")
         ("arguments", "show arguments")
@@ -199,6 +198,7 @@ int CCALL main ( int argc, /*const*/ char * argv[], /*const*/ char* /*const*/ * 
     std::string conversionMode;
     std::string input;
     std::string output;
+    std::string helloTo;
     po::variables_map vm;
     try {
         po::store(po::parse_command_line(argc, argv, desc), vm);
@@ -256,6 +256,10 @@ int CCALL main ( int argc, /*const*/ char * argv[], /*const*/ char* /*const*/ * 
             g_info.system("libsysinfo_isCharSigned=%d", libsysinfo_isCharSigned());
         }
 
+        if ( runAllSections || vm.count("hello") ) {
+            helloTo = vm["hello"].as<std::string>();
+        }
+
         if ( vm.count("verbose") ) {
             bool verbose = vm["verbose"].as<int>() != 0;
             g_info.system("--verbose=%d", verbose?1:0);
@@ -297,6 +301,12 @@ int CCALL main ( int argc, /*const*/ char * argv[], /*const*/ char* /*const*/ * 
 
 
         g_info.system(">>  Appliction Begin");
+
+
+        if ( !helloTo.empty() ) {
+            libhello_helloTo(helloTo.c_str());
+            //libhello_HiddenMe(); // Hence, HiddenMe should NOT be called.
+        }
 
 
         if ( !conversionMode.empty() ) {

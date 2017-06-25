@@ -12,6 +12,7 @@
 #endif
 
 #ifdef ENABLE_LIBPOCO
+    #include <Poco/String.h>
     #include <Poco/UUIDGenerator.h>
     using namespace Poco;
 #else
@@ -81,6 +82,18 @@ namespace {
 
 CInfoCollector g_info(false);
 
+
+int icompare( const std::string & str1, const std::string & str2 ) {
+    #ifdef ENABLE_LIBPOCO
+        return Poco::icompare(str1, str2);
+    #elif defined _MSC_VER
+        return _stricmp(str1.c_str(), str2.c_str());
+    #elif defined __GNUC__
+        return strcasecmp(str1.c_str(), str2.c_str());
+    #else
+        return strcmp(str1.c_str(), str2.c_str());
+    #endif
+}
 
 typedef size_t (* FP_ConvertFunc)( std::istream & input, std::ostream & output, const CInfoCollector & info );
 
@@ -341,13 +354,16 @@ int CCALL main ( int argc, /*const*/ char * argv[], /*const*/ char* /*const*/ * 
         if ( !conversionMode.empty() ) {
             bool result = false;
             FP_ConvertFunc convertFunc = NULL;
-            if( 0 == strcmp(conversionMode.c_str(), "hex2bin") ) {
+            if( 0 == ::icompare(conversionMode, "hex2bin") ) {
                 convertFunc = convertHex2Bin;
             }
-            else if( 0 == strcmp(conversionMode.c_str(), "bin2hex") ) {
+            else if( 0 == ::icompare(conversionMode, "bin2hex") ) {
                 convertFunc = convertBin2Hex;
             }
-            else if( 0 == strcmp(conversionMode.c_str(), "uuid") ) {
+            else if( 0 == ::icompare(conversionMode, "bin2base64") ) {
+                convertFunc = convertBin2Base64;
+            }
+            else if( 0 == ::icompare(conversionMode, "uuid") ) {
                 convertFunc = generateUUID;
             }
             else {

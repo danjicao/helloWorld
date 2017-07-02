@@ -237,61 +237,44 @@ int CCALL main ( int argc, /*const*/ char * argv[], /*const*/ char* /*const*/ * 
         ("input,i" , po::value<std::string>()->default_value("")->implicit_value(""), "input")
         ("output,o", po::value<std::string>()->default_value("")->implicit_value(""), "output")
     ;
-
+    po::variables_map vm;
 
     std::string conversionMode;
     std::string input;
     std::string output;
     std::string helloTo;
-    po::variables_map vm;
+    bool verbose = false;
+    bool runAllSections = false;
+    bool showArguments = false;
+    bool showEnv = false;
+    bool showVersion = false;
+    bool showHelp = false;
+    bool printCompliedInfo = false;
+
     try {
         po::store(po::parse_command_line(argc, argv, desc), vm);
         po::notify(vm);
 
         if ( vm.count("help") ) {
-            g_info.options(desc);
-            return 1;
+            showHelp = true;
         }
 
         if ( vm.count("verbose") ) {
-            bool verbose = vm["verbose"].as<int>() != 0;
-            g_info.setVerbose(verbose);
-            g_info.trace("--verbose=%d", verbose?1:0);
+            verbose = vm["verbose"].as<int>() != 0;
         }
 
-
-        bool runAllSections( vm.count("all") > 0 );
-        if ( runAllSections ) {
-            g_info.trace("--all");
-        }
-
+        runAllSections = ( vm.count("all") > 0 );
 
         if ( runAllSections || vm.count("version") ) {
-            g_info.system(">> version:");
-            g_info.system("%s ver. %s, rev. %s (%s)", PROJECT, PROJECT_VERSION, PROJECT_GIT_REVISION, PROJECT_BUILD_TIME);
-            g_info.system("%-10s ver. %s, rev. %s, sover. %s (%s)", libsysinfo_get_plugin_name(), libsysinfo_get_plugin_version(), libsysinfo_get_plugin_revision(), libsysinfo_get_plugin_soversion(), libsysinfo_get_plugin_buildtime());
-            g_info.system("%-10s ver. %s, rev. %s, sover. %s (%s)", libhello_get_plugin_name(), libhello_get_plugin_version(), libhello_get_plugin_revision(), libhello_get_plugin_soversion(), libhello_get_plugin_buildtime());
-
-            #ifdef ENABLE_PLUGINS
-            g_info.system("%-10s ver. %s, rev. %s, sover. %s (%s)", libplugins_get_plugin_name(), libplugins_get_plugin_version(), libplugins_get_plugin_revision(), libplugins_get_plugin_soversion(), libplugins_get_plugin_buildtime());
-            #endif
+            showVersion = true;
         }
 
         if ( runAllSections || vm.count("arguments") ) {
-            g_info.system(">>  arguments:");
-            g_info.system("    argc=%d", argc);
-            for( int i = 0; i < argc; ++i )
-            {
-                g_info.system( "    argv[%2d] = \"%s\"", i, argv[i] );
-            }
+            showArguments = true;
         }
 
         if ( runAllSections || vm.count("env") ) {
-            g_info.system(">>  environment variables:");
-            for (const char* const* env = envp; *env != NULL; ++env)
-            {
-                g_info.system("    %s", *env);
-            }
+            showEnv = true;
         }
 
         #ifdef ENABLE_PLUGINS
@@ -303,52 +286,94 @@ int CCALL main ( int argc, /*const*/ char * argv[], /*const*/ char* /*const*/ * 
         #endif
 
         if ( runAllSections || vm.count("printCompliedInfo") ) {
-            libsysinfo_printCompliedInfo();
-            libsysinfo_printByteOrderType();
-            g_info.system("libsysinfo_isCharSigned=%d", libsysinfo_isCharSigned());
-            g_info.system("libsysinfo_getOsInfo=%s", libsysinfo_getOsInfo());
+            printCompliedInfo = true;
         }
 
         if ( runAllSections || vm.count("hello") ) {
             helloTo = vm.count("hello")?vm["hello"].as<std::string>():"World";
         }
 
-
         if ( vm.count("conversion-mode") ) {
             conversionMode = vm["conversion-mode"].as<std::string>();
-            if ( !conversionMode.empty() ) {
-                if ( '=' == conversionMode[0] ) {
-                    conversionMode.erase(0, 1);
-                }
-
-                g_info.trace("--conversion-mode=%s", conversionMode.c_str());
-            }
         }
-
 
         if ( vm.count("input") ) {
             input = vm["input"].as<std::string>();
+                }
+
+        if ( vm.count("output") ) {
+            output = vm["output"].as<std::string>();
+            }
+
+        if ( showHelp ) {
+            g_info.options(desc);
+            return 1;
+        }
+
+        g_info.setVerbose(verbose);
+        g_info.trace("--verbose=%d", verbose?1:0);
+
+        if ( runAllSections ) {
+            g_info.trace("--all");
+        }
 
             if ( !input.empty() ) {
                 if ( '=' == input[0] ) {
                     input.erase(0, 1);
                 }
                 g_info.trace("--input=%s", input.c_str());
-            }
         }
 
-
-        if ( vm.count("output") ) {
-            output = vm["output"].as<std::string>();
-
-            if ( !output.empty() ) {
-                g_info.trace("--output=%s", output.c_str());
+        if ( !output.empty() ) {
+            if ( '=' == output[0] ) {
+                output.erase(0, 1);
             }
+            g_info.trace("--output=%s", output.c_str());
         }
 
+        if ( !conversionMode.empty() ) {
+            if ( '=' == conversionMode[0] ) {
+                conversionMode.erase(0, 1);
+            }
+            g_info.trace("--conversion-mode=%s", conversionMode.c_str());
+        }
 
         g_info.system(">>  Appliction Begin");
 
+        if ( showArguments ) {
+            g_info.system(">>  arguments:");
+            g_info.system("    argc=%d", argc);
+            for( int i = 0; i < argc; ++i )
+            {
+                g_info.system( "    argv[%2d] = \"%s\"", i, argv[i] );
+            }
+        }
+
+        if ( showEnv ) {
+            g_info.system(">>  environment variables:");
+            for (const char* const* env = envp; *env != NULL; ++env)
+            {
+                g_info.system("    %s", *env);
+            }
+        }
+
+        if ( showVersion ) {
+            g_info.system(">> version:");
+            g_info.system("%s ver. %s, rev. %s (%s)", PROJECT, PROJECT_VERSION, PROJECT_GIT_REVISION, PROJECT_BUILD_TIME);
+            g_info.system("%-10s ver. %s, rev. %s, sover. %s (%s)", libsysinfo_get_plugin_name(), libsysinfo_get_plugin_version(), libsysinfo_get_plugin_revision(), libsysinfo_get_plugin_soversion(), libsysinfo_get_plugin_buildtime());
+            g_info.system("%-10s ver. %s, rev. %s, sover. %s (%s)", libhello_get_plugin_name(), libhello_get_plugin_version(), libhello_get_plugin_revision(), libhello_get_plugin_soversion(), libhello_get_plugin_buildtime());
+
+            #ifdef ENABLE_PLUGINS
+            g_info.system("%-10s ver. %s, rev. %s, sover. %s (%s)", libplugins_get_plugin_name(), libplugins_get_plugin_version(), libplugins_get_plugin_revision(), libplugins_get_plugin_soversion(), libplugins_get_plugin_buildtime());
+            #endif
+        }
+
+        if ( printCompliedInfo ) {
+            libsysinfo_printCompliedInfo();
+            libsysinfo_printByteOrderType();
+            g_info.system("libsysinfo_isCharSigned=%d", libsysinfo_isCharSigned());
+            g_info.system("libsysinfo_getOsInfo=%s", libsysinfo_getOsInfo());
+        }
 
         if ( !helloTo.empty() ) {
             libhello_helloTo(helloTo.c_str());

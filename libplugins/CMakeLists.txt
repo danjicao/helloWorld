@@ -48,6 +48,8 @@ IF ( enable_libboost )
     ADD_DEFINITIONS(
         -DENABLE_LIBBOOST
     )
+ELSE ()
+    MESSAGE ( FATAL_ERROR "libplugins should be using libboost." )
 ENDIF ()
 
 

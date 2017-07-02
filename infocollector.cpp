@@ -99,6 +99,7 @@ void CInfoCollector::system( const char * fmt, ... ) const {
 }
 
 
+#ifdef ENABLE_LIBBOOST
 void CInfoCollector::options( boost::program_options::options_description & desc ) {
     std::cout << termcolor::yellow;
     std::streambuf * pOutputBuf = std::cout.rdbuf();
@@ -106,6 +107,7 @@ void CInfoCollector::options( boost::program_options::options_description & desc
     desc.print(outstream);
     std::cout << termcolor::reset << std::endl;
 }
+#endif
 
 
 void CInfoCollector::setVerbose( bool verbose ) {

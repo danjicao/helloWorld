@@ -19,8 +19,13 @@
     #include <uuid/uuid.h>
 #endif
 
-#include <boost/program_options.hpp>
-namespace po = boost::program_options;
+
+#ifdef ENABLE_LIBBOOST
+    #include <boost/program_options.hpp>
+    namespace po = boost::program_options;
+#else
+    #include <getopt.h>
+#endif
 
 
 static void beforeMain( void );
@@ -220,6 +225,7 @@ size_t generateUUID( std::istream & input, std::ostream & output, const CInfoCol
 
 int CCALL main ( int argc, /*const*/ char * argv[], /*const*/ char* /*const*/ * envp )
 {
+    #ifdef ENABLE_LIBBOOST
     po::options_description desc("Allowed options");
     desc.add_options()
         ("help,h", "produce help message")
@@ -238,6 +244,28 @@ int CCALL main ( int argc, /*const*/ char * argv[], /*const*/ char* /*const*/ * 
         ("output,o", po::value<std::string>()->default_value("")->implicit_value(""), "output")
     ;
     po::variables_map vm;
+    #else
+    char* const shortOptions = "havc:i:o:W";
+    const struct option longOptions[] = {
+        {  "help"               , no_argument       , NULL      , 'h'   },
+        {  "hello"              , required_argument , NULL      , 1     },
+        {  "version"            , no_argument       , NULL      , 1     },
+        {  "all"                , no_argument       , NULL      , 'a'   },
+        {  "arguments"          , no_argument       , NULL      , 1     },
+        {  "env"                , no_argument       , NULL      , 1     },
+        {  "printCompliedInfo"  , no_argument       , NULL      , 1     },
+        {  "verbose"            , no_argument       , NULL      , 'v'   },
+        {  "conversion-mode"    , required_argument , NULL      , 'c'   },
+        {  "input"              , required_argument , NULL      , 'i'   },
+        {  "output"             , required_argument , NULL      , 'o'   },
+        {  NULL                 , no_argument       , NULL      , 0     }
+    };
+    const size_t longOptionsCount = sizeof(longOptions) / sizeof(*longOptions);
+    extern char* optarg; // The argument for an option, if the option accepts one.
+    extern int optind;   // The current index in argv. When the while loop has finished, remaining operands are found in argv[optind] through argv[argc-1]. (Remember that 'argv[argc] == NULL'.)
+    extern int opterr;   // When this variable is nonzero (which it is by default), getopt() prints its own error messages for invalid options and for missing option arguments.
+    extern int optopt;   // When an invalid option character is found, getopt() returns either a '?' or a ':' (see below), and optopt contains the invalid character that was found.
+    #endif
 
     std::string conversionMode;
     std::string input;
@@ -252,6 +280,7 @@ int CCALL main ( int argc, /*const*/ char * argv[], /*const*/ char* /*const*/ * 
     bool printCompliedInfo = false;
 
     try {
+        #ifdef ENABLE_LIBBOOST
         po::store(po::parse_command_line(argc, argv, desc), vm);
         po::notify(vm);
 
@@ -299,14 +328,120 @@ int CCALL main ( int argc, /*const*/ char * argv[], /*const*/ char* /*const*/ * 
 
         if ( vm.count("input") ) {
             input = vm["input"].as<std::string>();
-                }
+        }
 
         if ( vm.count("output") ) {
             output = vm["output"].as<std::string>();
+        }
+
+        #else
+        int option = 0;
+        int longindex = 0;
+        while ( (option = getopt_long(argc, argv, shortOptions, longOptions, &longindex)) != -1 ) {
+            switch (option) {
+            case 'a':
+                runAllSections = true;
+                break;
+            case 'c':
+                if ( optarg ) {
+                    conversionMode.assign(optarg);
+                }
+                break;
+            case 'h':
+                showHelp = true;
+                break;
+            case 'i':
+                if ( optarg ) {
+                    input.assign(optarg);
+                }
+                break;
+            case 'o':
+                if ( optarg ) {
+                    output.assign(optarg);
+                }
+                break;
+            case 'v':
+                verbose = true;
+                break;
+            case 0:
+                /* getopt_long() set a variable, just keep going */
+                break;
+            case 1:
+                /*
+                * Use this case if getopt_long() should go through all
+                * arguments. If so, add a leading '-' character to optstring.
+                * Actual code, if any, goes here.
+                */
+                {
+                    if ( 0 <= longindex && longindex < longOptionsCount) {
+                        const struct option currentOption = longOptions[longindex];
+                        if ( currentOption.name ) {
+                            if ( 0 == strcmp(currentOption.name, "hello") ) {
+                                if ( optarg ) {
+                                    helloTo.assign(optarg);
+                                }
+                            }
+                            else if ( 0 == strcmp(currentOption.name, "version") ) {
+                                showVersion = true;
+                            }
+                            else if ( 0 == strcmp(currentOption.name, "arguments") ) {
+                                showArguments = true;
+                            }
+                            else if ( 0 == strcmp(currentOption.name, "env") ) {
+                                showArguments = true;
+                            }
+                            else if ( 0 == strcmp(currentOption.name, "printCompliedInfo") ) {
+                                printCompliedInfo = true;
+                            }
+                            else {
+                                if ( optarg ) {
+                                    g_info.error("Unknown option '--%s=%s' (index=%d): ignored\\n", currentOption.name, optarg, longindex);
+                                }
+                                else {
+                                    g_info.error("Unknown option '--%s' (index=%d): ignored\\n", currentOption.name, longindex);
+                                }
+                            }
+                        }
+                    }
+                }
+                break;
+            case ':':   /* missing option argument */
+                g_info.error("option '-%c' requires an argument\n", optopt);
+                break;
+            case '?':
+            default:    /* invalid option */
+                if ( 0 <= optind && optind < argc ) {
+                    g_info.error("Unknown option '%s': ignored.\n", argv[optind]);
+                }
+                else {
+                    g_info.error("Unknown option at unknown position.\n");
+                }
+                break;
             }
+        }
+        #endif
+
 
         if ( showHelp ) {
+            #ifdef ENABLE_LIBBOOST
             g_info.options(desc);
+            #else
+            g_info.system("Usage:");
+            g_info.system("    --help,-h: produce help message");
+            g_info.system("    --hello: print hello message");
+            g_info.system("    --version: show version");
+            g_info.system("    --all,-a: run all sections");
+            g_info.system("    --arguments: show arguments");
+            g_info.system("    --env: show environment variables");
+            #ifdef ENABLE_PLUGINS
+            g_info.system("    --plugins,-p: enable plugins system");
+            #endif
+            g_info.system("    --printCompliedInfo: print complied information");
+            g_info.system("    --verbose,-v: verbosity level");
+            g_info.system("    --conversion-mode,-c: conversion-mode");
+            g_info.system("    --input,-i: input");
+            g_info.system("    --output,-o: output");
+            #endif
             return 1;
         }
 
@@ -317,11 +452,11 @@ int CCALL main ( int argc, /*const*/ char * argv[], /*const*/ char* /*const*/ * 
             g_info.trace("--all");
         }
 
-            if ( !input.empty() ) {
-                if ( '=' == input[0] ) {
-                    input.erase(0, 1);
-                }
-                g_info.trace("--input=%s", input.c_str());
+        if ( !input.empty() ) {
+            if ( '=' == input[0] ) {
+                input.erase(0, 1);
+            }
+            g_info.trace("--input=%s", input.c_str());
         }
 
         if ( !output.empty() ) {
@@ -460,17 +595,23 @@ int CCALL main ( int argc, /*const*/ char * argv[], /*const*/ char* /*const*/ * 
         g_info.system(">>  Appliction Finish");
 
 
-    } catch ( const po::unknown_option& e ) {
+    }
+    #ifdef ENABLE_LIBBOOST
+    catch ( const po::unknown_option& e ) {
         g_info.error("Error! (boost::program_options) %s", e.what());
         g_info.options(desc);
         return 1;
-    } catch ( const po::error& e ) {
+    }
+    catch ( const po::error& e ) {
         g_info.error("Error! (boost::program_options) %s", e.what());
         return 1;
-    } catch ( const std::exception& e ) {
+    }
+    #endif
+    catch ( const std::exception& e ) {
         g_info.error("Error! %s", e.what());
         return 1;
-    } catch ( ... ) {
+    }
+    catch ( ... ) {
         g_info.error("Error! Unknown.");
         return 1;
     }

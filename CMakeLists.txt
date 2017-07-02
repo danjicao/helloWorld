@@ -6,6 +6,7 @@ OPTION (enable_shared_libhello "enable shared libhello" ON)
 OPTION (enable_plugins "enable plugins" ON)
 OPTION (enable_shared_libplugins "enable shared libplugins" ON)
 OPTION (enable_libpoco "enable poco library" ON)
+OPTION (enable_libboost "enable boost library" ON)
 
 
 IF (CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
@@ -54,10 +55,15 @@ INCLUDE (install)
 CONFIGURE_FILE (${CMAKE_SOURCE_DIR}/cmake/config.h.in ${CMAKE_CURRENT_BINARY_DIR}/config.h)
 
 
-SET (Boost_USE_STATIC_LIBS OFF)
-SET (Boost_USE_MULTITHREADED ON)
-SET (Boost_USE_STATIC_RUNTIME OFF)
-FIND_PACKAGE( Boost 1.63 COMPONENTS program_options REQUIRED )
+IF ( enable_libboost )
+    SET (Boost_USE_STATIC_LIBS OFF)
+    SET (Boost_USE_MULTITHREADED ON)
+    SET (Boost_USE_STATIC_RUNTIME OFF)
+    FIND_PACKAGE( Boost 1.63 COMPONENTS program_options REQUIRED )
+    ADD_DEFINITIONS(
+        -DENABLE_LIBBOOST
+    )
+ENDIF ()
 
 
 IF ( enable_libpoco )
@@ -118,12 +124,8 @@ SET_TARGET_PROPERTIES (${PROJECT_NAME}
 
 TARGET_INCLUDE_DIRECTORIES( ${PROJECT_NAME}
     PRIVATE "${CMAKE_SOURCE_DIR}/thirdparty/json/src"
-    PUBLIC  "${Boost_INCLUDE_DIR}"
     PRIVATE "${CMAKE_SOURCE_DIR}/thirdparty/termcolor/include"
 )
-
-
-TARGET_LINK_LIBRARIES( ${PROJECT_NAME} ${Boost_LIBRARIES} )
 
 
 IF (enable_shared_libhello)
@@ -148,19 +150,29 @@ ELSE ()
 ENDIF ()
 
 
-IF (enable_plugins)
-    ADD_DEFINITIONS(
-        -DENABLE_PLUGINS
+IF ( enable_libboost )
+    TARGET_INCLUDE_DIRECTORIES( ${PROJECT_NAME}
+        PRIVATE "${Boost_INCLUDE_DIR}"
     )
 
-    ADD_SUBDIRECTORY (libplugins)
-    ADD_SUBDIRECTORY (libpluginhelper)
-    ADD_SUBDIRECTORY (plugins/libexample)
+    TARGET_LINK_LIBRARIES( ${PROJECT_NAME}
+        ${Boost_LIBRARIES}
+    )
 
-    IF (enable_shared_libplugins)
-        TARGET_LINK_LIBRARIES (${PROJECT_NAME} libplugins)
-    ELSE ()
-        TARGET_LINK_LIBRARIES (${PROJECT_NAME} libplugins-static)
+    IF (enable_plugins)
+        ADD_DEFINITIONS(
+            -DENABLE_PLUGINS
+        )
+
+        ADD_SUBDIRECTORY (libplugins)
+        ADD_SUBDIRECTORY (libpluginhelper)
+        ADD_SUBDIRECTORY (plugins/libexample)
+
+        IF (enable_shared_libplugins)
+            TARGET_LINK_LIBRARIES (${PROJECT_NAME} libplugins)
+        ELSE ()
+            TARGET_LINK_LIBRARIES (${PROJECT_NAME} libplugins-static)
+        ENDIF ()
     ENDIF ()
 ENDIF ()
 

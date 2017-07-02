@@ -60,17 +60,10 @@ IF ( enable_libboost )
     SET (Boost_USE_MULTITHREADED ON)
     SET (Boost_USE_STATIC_RUNTIME OFF)
     FIND_PACKAGE( Boost 1.63 COMPONENTS program_options REQUIRED )
-    ADD_DEFINITIONS(
-        -DENABLE_LIBBOOST
-    )
 ENDIF ()
 
 
 IF ( enable_libpoco )
-    ADD_DEFINITIONS(
-            -DENABLE_LIBPOCO
-    )
-
     ## the directory ${POCO_PREFIX} containing "include" and "lib"
     IF ( APPLE )
         EXECUTE_PROCESS (
@@ -151,6 +144,10 @@ ENDIF ()
 
 
 IF ( enable_libboost )
+    TARGET_COMPILE_DEFINITIONS( ${PROJECT_NAME}
+        PRIVATE "ENABLE_LIBBOOST"
+    )
+
     TARGET_INCLUDE_DIRECTORIES( ${PROJECT_NAME}
         PRIVATE "${Boost_INCLUDE_DIR}"
     )
@@ -160,8 +157,8 @@ IF ( enable_libboost )
     )
 
     IF (enable_plugins)
-        ADD_DEFINITIONS(
-            -DENABLE_PLUGINS
+        TARGET_COMPILE_DEFINITIONS( ${PROJECT_NAME}
+            PRIVATE "ENABLE_PLUGINS"
         )
 
         ADD_SUBDIRECTORY (libplugins)
@@ -178,6 +175,10 @@ ENDIF ()
 
 
 IF ( enable_libpoco )
+    TARGET_COMPILE_DEFINITIONS( ${PROJECT_NAME}
+        PRIVATE "ENABLE_LIBPOCO"
+    )
+
     TARGET_INCLUDE_DIRECTORIES( ${PROJECT_NAME}
         PRIVATE "${POCO_INCLUDE_DIR}"
     )
